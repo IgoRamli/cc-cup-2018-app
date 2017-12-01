@@ -1,0 +1,55 @@
+{
+  "project_info": {
+    "project_number": "71341404329",
+    "firebase_url": "https://cc-cup-2018.firebaseio.com",
+    "project_id": "cc-cup-2018",
+    "storage_bucket": "cc-cup-2018.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:71341404329:android:bcce54e7b8941e27",
+        "android_client_info": {
+          "package_name": "org.osiskanisius.cccup.cccup2018"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "71341404329-b88feio2dpf4jkto0c884men83u7nkuh.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "org.osiskanisius.cccup.cccup2018",
+            "certificate_hash": "6cc62255a93c2b7ba835679090baba0cb63270d5"
+          }
+        },
+        {
+          "client_id": "71341404329-tup56np1v7p5edk5k6q58bjio4257v9m.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBLRoGSJI4hSZJmeEa5sWovJozbgPTpjPo"
+        }
+      ],
+      "services": {
+        "analytics_service": {
+          "status": 1
+        },
+        "appinvite_service": {
+          "status": 2,
+          "other_platform_oauth_client": [
+            {
+              "client_id": "71341404329-tup56np1v7p5edk5k6q58bjio4257v9m.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        },
+        "ads_service": {
+          "status": 2
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
