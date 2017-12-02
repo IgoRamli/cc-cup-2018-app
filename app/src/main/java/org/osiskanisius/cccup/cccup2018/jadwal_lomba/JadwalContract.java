@@ -5,4 +5,11 @@ package org.osiskanisius.cccup.cccup2018.jadwal_lomba;
  */
 
 public interface JadwalContract {
+    interface View{
+
+    }
+
+    interface Presenter{
+
+    }
 }
