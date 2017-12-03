@@ -16,20 +16,13 @@ import android.view.ViewGroup;
 
 import org.osiskanisius.cccup.cccup2018.R;
 
-public class JadwalFragment extends Fragment {
+public class JadwalFragment extends Fragment implements JadwalContract.View{
     // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
 
     public JadwalFragment() {
         // Required empty public constructor
     }
 
-    /**
-     * Use this factory method to create a new instance of
-     * this fragment using the provided parameters.
-     *
-     * @return A new instance of fragment EventFragment.
-     */
-    // TODO: Rename and change types and number of parameters
     public static JadwalFragment newInstance() {
         JadwalFragment fragment = new JadwalFragment();
         Bundle args = new Bundle();
