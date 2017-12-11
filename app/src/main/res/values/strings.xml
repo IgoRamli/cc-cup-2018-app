@@ -5,4 +5,10 @@
     <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_home_fragment">Hello blank fragment</string>
     <string name="hello_jadwal_fragment">Hello jadwal fragment</string>
+    <string-array name="jadwal_list">
+        <item>Sepak Bola</item>
+        <item>Bola Voli Putra</item>
+        <item>Bola Voli Putri</item>
+        <item>Catur</item>
+    </string-array>
 </resources>
