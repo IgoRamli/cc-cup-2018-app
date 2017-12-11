@@ -7,13 +7,15 @@ import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
+import android.widget.Spinner;
+import android.widget.TextView;
 
 import org.osiskanisius.cccup.cccup2018.R;
 
 /**
  * A simple {@link Fragment} subclass.
  * Activities that contain this fragment must implement the
- * {@link JadwalFragment.OnFragmentInteractionListener} interface
  * to handle interaction events.
  * Use the {@link JadwalFragment#newInstance} factory method to
  * create an instance of this fragment.
@@ -26,6 +28,15 @@ import org.osiskanisius.cccup.cccup2018.R;
 
 public class JadwalFragment extends Fragment {
     //private OnFragmentInteractionListener mListener;
+    private String[][] mockData = {
+            {"Sepak Bola 1", "Sepak Bola 2", "Sepak Bola 3", "Sepak Bola 4", "Sepak Bola 5"},
+            {"Bola Voli Putra 1", "Bola Voli Putra 2", "Bola Voli Putra 3", "Bola Voli Putra 4", "Bola Voli Putra 5"},
+            {"Bola Voli Putri 1", "Bola Voli Putri 2", "Bola Voli Putri 3", "Bola Voli Putri 4", "Bola Voli Putri 5"},
+            {"Catur 1", "Catur 2", "Catur 3", "Catur 4", "Catur 5"}
+    };
+    private TextView listData;
+    private Spinner jadwalSpinner;
+    private int spinnerPosition = 0;
 
     public JadwalFragment() {
         // Required empty public constructor
@@ -35,8 +46,6 @@ public class JadwalFragment extends Fragment {
      * Use this factory method to create a new instance of
      * this fragment using the provided parameters.
      *
-     * @param param1 Parameter 1.
-     * @param param2 Parameter 2.
      * @return A new instance of fragment JadwalFragment.
      */
     public static JadwalFragment newInstance() {
@@ -48,18 +57,41 @@ public class JadwalFragment extends Fragment {
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);/*
-        if (getArguments() != null) {
-            mParam1 = getArguments().getString(ARG_PARAM1);
-            mParam2 = getArguments().getString(ARG_PARAM2);
-        }*/
+        super.onCreate(savedInstanceState);
     }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_jadwal, container, false);
+        View view =  inflater.inflate(R.layout.fragment_jadwal, container, false);
+        return view;
+    }
+
+    @Override
+    public void onViewCreated(View view, Bundle savedInstanceState){
+        listData = (TextView) getView().findViewById(R.id.tv_jadwal);
+        jadwalSpinner = (Spinner) getView().findViewById(R.id.jadwal_spinner);
+        changeJadwalType(0);//Initialization
+        jadwalSpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
+                changeJadwalType(i);
+            }
+
+            @Override
+            public void onNothingSelected(AdapterView<?> adapterView) {
+                changeJadwalType(0);
+            }
+        });
+    }
+
+    void changeJadwalType(int type){
+        listData.setText("");
+        for(String row : mockData[type]){
+            listData.append(row+"\n\n\n");
+        }
+
     }
 
     /*

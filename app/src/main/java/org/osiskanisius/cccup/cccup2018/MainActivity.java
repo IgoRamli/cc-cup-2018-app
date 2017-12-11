@@ -1,5 +1,7 @@
 package org.osiskanisius.cccup.cccup2018;
 
+import android.app.Fragment;
+import android.app.FragmentManager;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.design.widget.BottomNavigationView;
@@ -7,7 +9,11 @@ import android.support.v7.app.AppCompatActivity;
 import android.view.MenuItem;
 import android.widget.TextView;
 
+import org.osiskanisius.cccup.cccup2018.jadwal.JadwalFragment;
+
 public class MainActivity extends AppCompatActivity {
+    Fragment mainFragment;
+    FragmentManager fragmentManager;
 
     private BottomNavigationView.OnNavigationItemSelectedListener mOnNavigationItemSelectedListener
             = new BottomNavigationView.OnNavigationItemSelectedListener() {

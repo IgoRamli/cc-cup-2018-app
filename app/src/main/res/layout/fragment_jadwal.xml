@@ -10,7 +10,11 @@
         android:layout_height="match_parent"
         android:layout_marginTop="?actionBarSize"
         android:orientation="vertical">
-
+        <TextView
+            android:id="@+id/tv_jadwal"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:textSize="18sp"/>
     </LinearLayout>
     <android.support.design.widget.AppBarLayout
         android:layout_height="wrap_content"
