@@ -18,6 +18,12 @@ import org.osiskanisius.cccup.cccup2018.R;
  * Use the {@link JadwalFragment#newInstance} factory method to
  * create an instance of this fragment.
  */
+
+    //TODO (1) Buat simple layout dengan mock data
+    //TODO (2) Hubungkan dgn internet
+    //TODO (3) Perbaiki layout (RecyclerView?)
+    //TODO (4) Poles UI dan dokumentasi
+
 public class JadwalFragment extends Fragment {
     //private OnFragmentInteractionListener mListener;
 
