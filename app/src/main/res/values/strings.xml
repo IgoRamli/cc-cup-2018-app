@@ -1,6 +1,7 @@
 <resources>
     <string name="app_name">CC Cup 2018</string>
     <string name="title_home">Home</string>
+    <string name="titla_jadwal">Jadwal</string>
 
     <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>
