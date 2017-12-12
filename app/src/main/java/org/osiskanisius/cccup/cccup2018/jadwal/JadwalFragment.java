@@ -154,19 +154,19 @@ public class JadwalFragment extends Fragment {
         // TODO: Update argument type and name
         void onFragmentInteraction(Uri uri);
     }*/
-    public class FetchDataTask extends AsyncTask<URL, Void, String[]> {
+    public class FetchDataTask extends AsyncTask<URL, Void, String> {
         @Override
         public void onPreExecute(){
             progressBar.setVisibility(ProgressBar.VISIBLE);
         }
 
         @Override
-        public String[] doInBackground(URL... url){
+        public String doInBackground(URL... url){
             URL request = url[0];
             try{
                 String result;
                 result = NetworkUtil.getResponse(request);
-                String[] hasilAkhir = JadwalJsonParser.parseSimpleJadwal(result);
+                String hasilAkhir = JadwalJsonParser.parseSimpleJadwal(result);
                 return  hasilAkhir;
             }catch(IOException e){
                 e.printStackTrace();
@@ -177,15 +177,16 @@ public class JadwalFragment extends Fragment {
         }
 
         @Override
-        public void onPostExecute(String[] hasilAkhir){
+        public void onPostExecute(String hasilAkhir){
             progressBar.setVisibility(ProgressBar.INVISIBLE);
             if(hasilAkhir == null){
                 displayErrorMessage();
+            }else if(hasilAkhir.equals("")){
+                displayJadwalLomba();
+                listData.setText("Tidak ada lomba untuk saat ini");
             }else{
                 displayJadwalLomba();
-                for(String dataLomba : hasilAkhir){
-                    listData.append(dataLomba+"\n\n\n");
-                }
+                listData.setText(hasilAkhir);
             }
         }
 
