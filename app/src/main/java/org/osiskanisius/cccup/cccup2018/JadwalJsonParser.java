@@ -11,14 +11,14 @@ import java.util.Iterator;
  */
 
 public class JadwalJsonParser {
-    final String NAMA_LOMBA = "namaLomba";
-    final String TANGGAL_LOMBA = "date";
-    final String WAKTU_LOMBA = "waktuMulai";
-    final String DAFTAR_PESERTA = "arrPeserta";
-    final String NAMA_LOKASI = "namaLokasi";
-    final String NAMA_PESERTA = "namaPeserta";
-    final String NAMA_SEKOLAH = "namaSekolah";
-    final String SKOR_PESERTA = "skorPeserta";
+    static final String NAMA_LOMBA = "namaLomba";
+    static final String TANGGAL_LOMBA = "date";
+    static final String WAKTU_LOMBA = "waktuMulai";
+    static final String DAFTAR_PESERTA = "arrPeserta";
+    static final String NAMA_LOKASI = "namaLokasi";
+    static final String NAMA_PESERTA = "namaPeserta";
+    static final String NAMA_SEKOLAH = "namaSekolah";
+    static final String SKOR_PESERTA = "skorPeserta";
 
     /**
      * Mengambil data dari JSON yang dihasilkan setelah memanggil test_json.php
@@ -27,7 +27,7 @@ public class JadwalJsonParser {
      * @return array of String. Setiap elemen dalam array berisi data satu lomba
      * @throws JSONException apabila terjadi kesalahan dalam mengambil JSON
      */
-    String[] parseSimpleJadwal(String json) throws JSONException{
+    public static String[] parseSimpleJadwal(String json) throws JSONException{
         JSONObject daftarLomba = new JSONObject(json);
         Iterator<String> keys = daftarLomba.keys();
         int jumlahLomba = daftarLomba.length();
@@ -43,19 +43,19 @@ public class JadwalJsonParser {
             String tanggalLomba = dataLomba.getString(TANGGAL_LOMBA);
             String waktuMulai = dataLomba.getString(WAKTU_LOMBA);
 
-            result += namaLomba+" "+tanggalLomba+"-"+waktuMulai+" (";
+            result += namaLomba+" "+tanggalLomba+"-"+waktuMulai;
 
             JSONArray daftarPeserta = dataLomba.getJSONArray(DAFTAR_PESERTA);
             int jumlahPeserta = daftarPeserta.length();
             for(int i = 0; i < jumlahPeserta; i++){
-                if(i > 0) result += " ";
+                result += "\n-> ";
                 JSONObject dataPeserta = daftarPeserta.getJSONObject(i);
                 String namaPeserta = dataPeserta.getString(NAMA_PESERTA);
                 String namaSekolah = dataPeserta.getString(NAMA_SEKOLAH);
                 String skorPeserta = dataPeserta.getString(SKOR_PESERTA);
-                result += namaPeserta+"-"+namaSekolah+"-"+skorPeserta;
+                result += namaPeserta+", "+namaSekolah+". Skor: "+skorPeserta;
             }
-            result += ") "+namaLokasi;
+            result += "\n"+namaLokasi;
             hasilAkhir[idx] = result;
         }
         return hasilAkhir;

@@ -22,10 +22,10 @@ import java.util.Scanner;
  */
 
 public class NetworkUtil {
-    private static final String CC_CUP_BASE_URL = "http://cccup.osiskanisius.org/admin/get_jadwal";
+    private static final String CC_CUP_BASE_URL = "http://cccup.osiskanisius.org/admin/test_join";
     private static final String BIDANG_ID_PARAM = "bidangID";
 
-    public URL makeWebQuery(int bidangID){
+    public static URL makeWebQuery(int bidangID){
         Uri uri = Uri.parse(CC_CUP_BASE_URL).buildUpon()
                 .appendQueryParameter(BIDANG_ID_PARAM, Integer.toString(bidangID))
                 .build();

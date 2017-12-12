@@ -1,7 +1,7 @@
 package org.osiskanisius.cccup.cccup2018.jadwal;
 
 import android.content.Context;
-import android.net.Uri;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
@@ -11,7 +11,13 @@ import android.widget.AdapterView;
 import android.widget.Spinner;
 import android.widget.TextView;
 
+import org.json.JSONException;
+import org.osiskanisius.cccup.cccup2018.JadwalJsonParser;
+import org.osiskanisius.cccup.cccup2018.NetworkUtil;
 import org.osiskanisius.cccup.cccup2018.R;
+
+import java.io.IOException;
+import java.net.URL;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -21,7 +27,6 @@ import org.osiskanisius.cccup.cccup2018.R;
  * create an instance of this fragment.
  */
 
-    //TODO (2) Hubungkan dgn internet
     //TODO (3) Perbaiki layout (RecyclerView?)
     //TODO (4) Simpan data di SQLite
     //TODO (5) Poles UI dan dokumentasi
@@ -72,11 +77,10 @@ public class JadwalFragment extends Fragment {
     public void onViewCreated(View view, Bundle savedInstanceState){
         listData = (TextView) getView().findViewById(R.id.tv_jadwal);
         jadwalSpinner = (Spinner) getView().findViewById(R.id.jadwal_spinner);
-        changeJadwalType(0);//Initialization
         jadwalSpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
-                changeJadwalType(i);
+                changeJadwalType(i+1);
             }
 
             @Override
@@ -88,10 +92,8 @@ public class JadwalFragment extends Fragment {
 
     void changeJadwalType(int type){
         listData.setText("");
-        for(String row : mockData[type]){
-            listData.append(row+"\n\n\n");
-        }
-
+        FetchDataTask internet = new FetchDataTask();
+        internet.execute(NetworkUtil.makeWebQuery(type));
     }
 
     /*
@@ -134,4 +136,28 @@ public class JadwalFragment extends Fragment {
         // TODO: Update argument type and name
         void onFragmentInteraction(Uri uri);
     }*/
+    public class FetchDataTask extends AsyncTask<URL, Void, String[]> {
+        @Override
+        public String[] doInBackground(URL... url){
+            URL request = url[0];
+            try{
+                String result;
+                result = NetworkUtil.getResponse(request);
+                String[] hasilAkhir = JadwalJsonParser.parseSimpleJadwal(result);
+                return  hasilAkhir;
+            }catch(IOException e){
+                e.printStackTrace();
+            }catch (JSONException e){
+                e.printStackTrace();
+            }
+            return null;
+        }
+
+        @Override
+        public void onPostExecute(String[] hasilAkhir){
+            for(String dataLomba : hasilAkhir){
+                listData.append(dataLomba+"\n\n\n");
+            }
+        }
+    }
 }
