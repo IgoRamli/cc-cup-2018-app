@@ -8,6 +8,8 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
+import android.widget.ArrayAdapter;
+import android.widget.ProgressBar;
 import android.widget.Spinner;
 import android.widget.TextView;
 
@@ -33,15 +35,17 @@ import java.net.URL;
 
 public class JadwalFragment extends Fragment {
     //private OnFragmentInteractionListener mListener;
-    private String[][] mockData = {
-            {"Sepak Bola 1", "Sepak Bola 2", "Sepak Bola 3", "Sepak Bola 4", "Sepak Bola 5"},
-            {"Bola Voli Putra 1", "Bola Voli Putra 2", "Bola Voli Putra 3", "Bola Voli Putra 4", "Bola Voli Putra 5"},
-            {"Bola Voli Putri 1", "Bola Voli Putri 2", "Bola Voli Putri 3", "Bola Voli Putri 4", "Bola Voli Putri 5"},
-            {"Catur 1", "Catur 2", "Catur 3", "Catur 4", "Catur 5"}
-    };
     private TextView listData;
+    private TextView errorText;
+    private ProgressBar progressBar;
     private Spinner jadwalSpinner;
-    private int spinnerPosition = 0;
+
+    //String bidang sementara!!
+    //TODO: Ganti string array agar sesuai dengan tabel bidang di MySQL
+    String[] listBidang = {"Sepak Bola", "Futsal", "Bola Basket", "Bola Voli Putra", "Bola Voli Putri",
+                            "Bulu Tangkis Putra", "Bulu Tangkis Putri", "Tenis Meja", "Modern Dance", "Fotografi",
+                            "Pencak Silat", "Tae Kwon Do", "Paskibra", "Panjat Tebing Putra", "Panjat Tebing Putri",
+                            "Billiard", "Catur", "Band"};
 
     public JadwalFragment() {
         // Required empty public constructor
@@ -63,6 +67,7 @@ public class JadwalFragment extends Fragment {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
     }
 
     @Override
@@ -76,7 +81,16 @@ public class JadwalFragment extends Fragment {
     @Override
     public void onViewCreated(View view, Bundle savedInstanceState){
         listData = (TextView) getView().findViewById(R.id.tv_jadwal);
+        errorText = (TextView) getView().findViewById(R.id.tv_error_msg);
+        progressBar = (ProgressBar) getView().findViewById(R.id.pb_loading_bar);
         jadwalSpinner = (Spinner) getView().findViewById(R.id.jadwal_spinner);
+
+        //Set adapter untuk Spinner
+        ArrayAdapter<String> spinnerAdapter = new ArrayAdapter<String>(getContext(),
+                android.R.layout.simple_spinner_item, listBidang);
+        spinnerAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        jadwalSpinner.setAdapter(spinnerAdapter);
+
         jadwalSpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
@@ -90,6 +104,10 @@ public class JadwalFragment extends Fragment {
         });
     }
 
+    /**
+     * Mengubah jadwal yang ditampilkan sesuai bidang pada spinner
+     * @param type setara bidangID. Bidang yang dipilih di spinner
+     */
     void changeJadwalType(int type){
         listData.setText("");
         FetchDataTask internet = new FetchDataTask();
@@ -138,6 +156,11 @@ public class JadwalFragment extends Fragment {
     }*/
     public class FetchDataTask extends AsyncTask<URL, Void, String[]> {
         @Override
+        public void onPreExecute(){
+            progressBar.setVisibility(ProgressBar.VISIBLE);
+        }
+
+        @Override
         public String[] doInBackground(URL... url){
             URL request = url[0];
             try{
@@ -155,9 +178,25 @@ public class JadwalFragment extends Fragment {
 
         @Override
         public void onPostExecute(String[] hasilAkhir){
-            for(String dataLomba : hasilAkhir){
-                listData.append(dataLomba+"\n\n\n");
+            progressBar.setVisibility(ProgressBar.INVISIBLE);
+            if(hasilAkhir == null){
+                displayErrorMessage();
+            }else{
+                displayJadwalLomba();
+                for(String dataLomba : hasilAkhir){
+                    listData.append(dataLomba+"\n\n\n");
+                }
             }
+        }
+
+        private void displayErrorMessage(){
+            errorText.setVisibility(TextView.VISIBLE);
+            listData.setVisibility(TextView.INVISIBLE);
+        }
+
+        private void displayJadwalLomba(){
+            errorText.setVisibility(TextView.INVISIBLE);
+            listData.setVisibility(TextView.VISIBLE);
         }
     }
 }

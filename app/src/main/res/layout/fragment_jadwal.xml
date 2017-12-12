@@ -5,12 +5,30 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context="org.osiskanisius.cccup.cccup2018.jadwal.JadwalFragment">
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_marginTop="?actionBarSize">
+        <TextView
+            android:id="@+id/tv_jadwal"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:textSize="18sp"/>
+    </ScrollView>
     <TextView
-        android:id="@+id/tv_jadwal"
+        android:id="@+id/tv_error_msg"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:layout_marginTop="?actionBarSize"
-        android:textSize="18sp"/>
+        android:textSize="22sp"
+        android:text="@string/error_msg"
+        android:visibility="invisible"/>
+    <ProgressBar
+        android:id="@+id/pb_loading_bar"
+        android:layout_width="42dp"
+        android:layout_height="42dp"
+        android:layout_gravity="center"
+        android:visibility="invisible"/>
     <android.support.design.widget.AppBarLayout
         android:layout_height="wrap_content"
         android:layout_width="match_parent">
@@ -21,8 +39,7 @@
             <android.widget.Spinner
                 android:id="@+id/jadwal_spinner"
                 android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:entries="@array/jadwal_list"/>
+                android:layout_height="wrap_content" />
         </android.widget.Toolbar>
 
     </android.support.design.widget.AppBarLayout>
