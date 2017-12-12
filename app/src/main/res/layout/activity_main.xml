@@ -8,10 +8,11 @@
     android:layout_height="match_parent"
     tools:context="org.osiskanisius.cccup.cccup2018.MainActivity">
     <fragment
+        class="org.osiskanisius.cccup.cccup2018.jadwal.JadwalFragment"
+        android:id="@+id/main_fragment"
         android:layout_width="match_parent"
         android:layout_height="0dp"
-        android:layout_weight="1"
-        android:name="org.osiskanisius.cccup.cccup2018.home.HomeFragment"/>
+        android:layout_weight="1" />
     
     <android.support.design.widget.BottomNavigationView
         android:id="@+id/navigation"
