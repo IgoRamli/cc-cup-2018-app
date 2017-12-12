@@ -29,18 +29,18 @@ public class NetworkUtil {
         Uri uri = Uri.parse(CC_CUP_BASE_URL).buildUpon()
                 .appendQueryParameter(BIDANG_ID_PARAM, Integer.toString(bidangID))
                 .build();
-        URL url = null;
+        URL url;
         try{
             url = new URL(uri.toString());
+            return url;
         }catch(MalformedURLException e){
             e.printStackTrace();
         }
         return null;
     }
 
-    public String getResponse(URL url) throws IOException{
+    public static String getResponse(URL url) throws IOException{
         HttpURLConnection urlConnection = (HttpURLConnection) url.openConnection();
-        urlConnection.setRequestMethod("POST");
         try {
             InputStream in = urlConnection.getInputStream();
 
