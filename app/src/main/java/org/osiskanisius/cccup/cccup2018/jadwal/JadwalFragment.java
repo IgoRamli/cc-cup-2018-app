@@ -194,7 +194,7 @@ public class JadwalFragment extends Fragment {
             progressBar.setVisibility(ProgressBar.INVISIBLE);
             if(hasilAkhir == null){
                 displayErrorMessage();
-            }else if(hasilAkhir.equals("")){
+            }else if(hasilAkhir.length == 0){
                 displayEmptyMessage();
             }else{
                 displayJadwalLomba();
