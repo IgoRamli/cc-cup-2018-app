@@ -1,19 +1,17 @@
 package org.osiskanisius.cccup.cccup2018;
 
-import android.app.Fragment;
-import android.app.FragmentManager;
+import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentActivity;
+import android.support.v4.app.FragmentManager;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.design.widget.BottomNavigationView;
-import android.support.v7.app.AppCompatActivity;
 import android.view.MenuItem;
-import android.widget.TextView;
 
 import org.osiskanisius.cccup.cccup2018.home.HomeFragment;
 import org.osiskanisius.cccup.cccup2018.jadwal.JadwalFragment;
 
-public class MainActivity extends AppCompatActivity {
-    Fragment mainFragment;
+public class MainActivity extends FragmentActivity {
     FragmentManager fragmentManager;
 
     HomeFragment home;
@@ -29,13 +27,17 @@ public class MainActivity extends AppCompatActivity {
                     if(home == null){
                         home = new HomeFragment();
                     }
-                    fragmentManager.beginTransaction().replace(R.id.main_fragment, home).commit();
+                    getSupportFragmentManager().beginTransaction()
+                            .replace(R.id.main_fragment, home)
+                            .commit();
                     return true;
                 case R.id.navigation_jadwal:
                     if(jadwal == null){
                         jadwal = new JadwalFragment();
                     }
-                    fragmentManager.beginTransaction().replace(R.id.main_fragment, jadwal).commit();
+                    getSupportFragmentManager().beginTransaction()
+                            .replace(R.id.main_fragment, jadwal)
+                            .commit();
                     return true;
             }
             return false;
@@ -47,7 +49,7 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        fragmentManager = getFragmentManager();
+        fragmentManager = getSupportFragmentManager();
 
         BottomNavigationView navigation = (BottomNavigationView) findViewById(R.id.navigation);
         navigation.setOnNavigationItemSelectedListener(mOnNavigationItemSelectedListener);
