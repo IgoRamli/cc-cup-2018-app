@@ -48,7 +48,7 @@ public class JadwalRecyclerViewAdapter
         }
     }
 
-    void setJadwalData(String[] jadwalData){
+    public void setJadwalData(String[] jadwalData){
         this.jadwalData = jadwalData;
         notifyDataSetChanged();
     }
