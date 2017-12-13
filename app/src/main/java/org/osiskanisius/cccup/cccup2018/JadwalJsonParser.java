@@ -28,13 +28,13 @@ public class JadwalJsonParser {
      * @return array of String. Setiap elemen dalam array berisi data satu lomba
      * @throws JSONException apabila terjadi kesalahan dalam mengambil JSON
      */
-    public static String parseSimpleJadwal(String json) throws JSONException{
+    public static String[] parseSimpleJadwal(String json) throws JSONException{
         JSONObject daftarLomba = new JSONObject(json);
         Iterator<String> keys = daftarLomba.keys();
         int jumlahLomba = daftarLomba.length()-1;
         if(jumlahLomba < 0) return null;
 
-        String hasilAkhir = "";
+        String[] hasilAkhir = new String[jumlahLomba];
 
         for(int idx = 0; keys.hasNext();){//Iterasi semua lomba yang ada
             String key = keys.next();
@@ -59,7 +59,7 @@ public class JadwalJsonParser {
                 result += namaPeserta+", "+namaSekolah+". Skor: "+skorPeserta;
             }
             result += "\n"+namaLokasi;
-            hasilAkhir += result+"\n\n";
+            hasilAkhir[idx] = result;
             idx++;
         }
         return hasilAkhir;
