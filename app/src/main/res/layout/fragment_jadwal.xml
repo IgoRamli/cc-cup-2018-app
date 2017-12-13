@@ -5,16 +5,15 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context="org.osiskanisius.cccup.cccup2018.jadwal.JadwalFragment">
-    <ScrollView
+
+    <android.support.v7.widget.RecyclerView
+        android:id="@+id/rv_jadwal"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:layout_marginTop="?actionBarSize">
-        <TextView
-            android:id="@+id/tv_jadwal"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:textSize="18sp"/>
-    </ScrollView>
+
+    </android.support.v7.widget.RecyclerView>
+
     <TextView
         android:id="@+id/tv_error_msg"
         android:layout_width="match_parent"
