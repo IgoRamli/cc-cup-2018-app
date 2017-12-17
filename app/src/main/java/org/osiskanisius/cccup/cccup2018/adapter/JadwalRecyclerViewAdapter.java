@@ -52,14 +52,17 @@ public class JadwalRecyclerViewAdapter
     }
 
     class JadwalViewHolder extends RecyclerView.ViewHolder{
-        TextView jadwalTextView;
+        TextView jadwalTextView, titleTextView;
         public JadwalViewHolder(View view){
             super(view);
             jadwalTextView = (TextView) view.findViewById(R.id.tv_jadwal);
+            titleTextView = (TextView) view.findViewById(R.id.tv_title);
         }
 
         void bind(String data){
-            jadwalTextView.setText(data);
+            String[] subData = data.split("\n", 2);
+            titleTextView.setText(subData[0]);
+            jadwalTextView.setText(subData[1]);
         }
     }
 

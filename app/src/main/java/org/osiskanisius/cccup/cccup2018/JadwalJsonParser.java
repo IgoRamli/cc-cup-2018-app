@@ -46,7 +46,7 @@ public class JadwalJsonParser {
             String tanggalLomba = dataLomba.getString(TANGGAL_LOMBA);
             String waktuMulai = dataLomba.getString(WAKTU_LOMBA);
 
-            result += namaLomba+" "+tanggalLomba+"-"+waktuMulai;
+            result += namaLomba+"\n"+tanggalLomba+"-"+waktuMulai;
 
             JSONArray daftarPeserta = dataLomba.getJSONArray(DAFTAR_PESERTA);
             int jumlahPeserta = daftarPeserta.length();
