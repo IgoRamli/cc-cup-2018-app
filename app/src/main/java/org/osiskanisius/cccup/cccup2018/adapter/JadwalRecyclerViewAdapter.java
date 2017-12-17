@@ -22,9 +22,12 @@ public class JadwalRecyclerViewAdapter
         @Override
         public void onClick(View view) {
             Intent gotoDetail = new Intent(view.getContext(), DetailActivity.class);
-            TextView tv = (TextView) view.findViewById(R.id.tv_jadwal);
-            String data = tv.getText().toString();
-            gotoDetail.putExtra(Intent.EXTRA_TEXT, data);
+            TextView mTitle = (TextView) view.findViewById(R.id.tv_title);
+            TextView mDesc = (TextView) view.findViewById(R.id.tv_jadwal);
+            String dataTitle = mTitle.getText().toString();
+            String dataDesc = mDesc.getText().toString();
+            gotoDetail.putExtra(Intent.EXTRA_TITLE, dataTitle);
+            gotoDetail.putExtra(Intent.EXTRA_TEXT, dataDesc);
             view.getContext().startActivity(gotoDetail);
             //Toast.makeText(view.getContext(), "Item selected", Toast.LENGTH_LONG).show();
         }
