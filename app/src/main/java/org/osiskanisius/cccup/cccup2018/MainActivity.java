@@ -10,6 +10,7 @@ import android.view.MenuItem;
 
 import org.osiskanisius.cccup.cccup2018.home.HomeFragment;
 import org.osiskanisius.cccup.cccup2018.jadwal.JadwalFragment;
+import org.osiskanisius.cccup.cccup2018.model.JadwalSQLOpenHelper;
 
 public class MainActivity extends FragmentActivity {
     FragmentManager fragmentManager;
@@ -49,6 +50,8 @@ public class MainActivity extends FragmentActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
+        JadwalSQLOpenHelper helper = new JadwalSQLOpenHelper(this);
+        helper.populateData();
         fragmentManager = getSupportFragmentManager();
 
         BottomNavigationView navigation = (BottomNavigationView) findViewById(R.id.navigation);

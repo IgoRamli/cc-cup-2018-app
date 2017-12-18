@@ -12,16 +12,20 @@ public final class JadwalSQLContract {
 
     public static class Bidang implements BaseColumns{
         public static final String TABLE_NAME = "bidang";
+        public static final String _ID = "bidangID";
         public static final String COLUMN_NAMA = "nama";
+        public static final String COLUMN_NAMA_DB = "namaDB";
     }
 
     public static class Sekolah implements BaseColumns{
         public static final String TABLE_NAME = "sekolah";
+        public static final String _ID = "sekolahID";
         public static final String COLUMN_NAMA = "nama";
     }
 
     public static class Peserta implements BaseColumns{
         public static final String TABLE_NAME = "peserta";
+        public static final String _ID = "pesertaID";
         public static final String COLUMN_BIDANG_ID = "bidangID";
         public static final String COLUMN_SEKOLAH_ID = "sekolahID";
         public static final String COLUMN_NAMA = "nama";
@@ -29,11 +33,13 @@ public final class JadwalSQLContract {
 
     public static class Lokasi implements BaseColumns{
         public static final String TABLE_NAME = "lokasi";
+        public static final String _ID = "lokasiID";
         public static final String COLUMN_NAMA = "nama";
     }
 
     public static class Lomba implements BaseColumns{
         public static final String TABLE_NAME = "lomba";
+        public static final String _ID = "lombaID";
         public static final String COLUMN_BIDANG_ID = "bidangID";
         public static final String COLUMN_LOKASI_ID = "lokasiID";
         public static final String COLUMN_NAMA = "nama";
@@ -43,6 +49,7 @@ public final class JadwalSQLContract {
 
     public static class LombaDetails implements BaseColumns{
         public static final String TABLE_NAME = "lombaDetails";
+        public static final String _ID = "lombaDetailsID";
         public static final String COLUMN_PESERTA_ID = "pesertaID";
         public static final String COLUMN_LOMBA_ID = "lombaID";
         public static final String COLUMN_SKOR_PESERTA = "skorPeserta";

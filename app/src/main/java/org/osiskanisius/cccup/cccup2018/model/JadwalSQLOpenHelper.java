@@ -1,22 +1,38 @@
 package org.osiskanisius.cccup.cccup2018.model;
 
+import android.app.LoaderManager;
+import android.content.ContentValues;
 import android.content.Context;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
+import android.provider.ContactsContract;
+import android.util.Log;
+
+import org.osiskanisius.cccup.cccup2018.internet.DataLoader;
+
+import java.util.HashMap;
+import java.util.Set;
 
 public class JadwalSQLOpenHelper extends SQLiteOpenHelper {
     private static final String DATABASE_NAME = "cc_cup_2018.db";
     private static final int DATABASE_VERSION = 1;
+    private Context context;
 
     public JadwalSQLOpenHelper(Context context){
         super(context, DATABASE_NAME, null, DATABASE_VERSION);
+        this.context = context;
+    }
+
+    public Context getContext(){
+        return context;
     }
 
     @Override
     public void onCreate(SQLiteDatabase db){
         db.execSQL("CREATE TABLE " + JadwalSQLContract.Bidang.TABLE_NAME + "("
         + JadwalSQLContract.Bidang._ID + " INTEGER PRIMARY KEY AUTOINCREMENT, "
-        + JadwalSQLContract.Bidang.COLUMN_NAMA + " TEXT NOT NULL"
+        + JadwalSQLContract.Bidang.COLUMN_NAMA + " TEXT NOT NULL, "
+        + JadwalSQLContract.Bidang.COLUMN_NAMA_DB + " TEXT NOT NULL"
         + ");");
 
         db.execSQL("CREATE TABLE " + JadwalSQLContract.Sekolah.TABLE_NAME + "("
@@ -92,6 +108,8 @@ public class JadwalSQLOpenHelper extends SQLiteOpenHelper {
         + ") REFERENCES " + JadwalSQLContract.Peserta.TABLE_NAME
         + "(" + JadwalSQLContract.Peserta._ID + ")"
         + ");");
+
+        populateData();
     }
 
     @Override
@@ -107,5 +125,24 @@ public class JadwalSQLOpenHelper extends SQLiteOpenHelper {
         db.execSQL("DROP TABLE IF EXISTS " + JadwalSQLContract.Bidang.TABLE_NAME);
 
         onCreate(db);
+    }
+
+    public void insertToTable(String tableName, HashMap<String,String> data){
+        ContentValues values = new ContentValues();
+        Set<String> keys = data.keySet();
+        for(String key : keys){
+            values.put(key, data.get(key));
+            Log.v("Presenter", "Put ("+key+", "+data.get(key)+") to values");
+        }
+        long result = getWritableDatabase()
+                .insert(tableName, null, values);
+        Log.v("Presenter", "Data insert Result: "+result);
+    }
+
+    public void populateData(){
+        Log.v("Presenter", "Start populating!");
+        DataLoader loader = new DataLoader(this);
+        loader.execute(JadwalSQLContract.Bidang.TABLE_NAME);
+        Log.v("Presenter", "Data populated");
     }
 }

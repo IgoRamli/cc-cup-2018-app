@@ -1,12 +1,17 @@
 package org.osiskanisius.cccup.cccup2018.model;
 
 import android.app.Application;
+import android.content.ContentValues;
 import android.content.Context;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
+import android.util.Log;
 
 import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Iterator;
+import java.util.Set;
 
 /**
  * Created by inigo on 18/12/17.
@@ -16,6 +21,10 @@ public class JadwalWriter{
     private Context context;
     private JadwalSQLOpenHelper dbHelper;
     private SQLiteDatabase db;
+
+    public Context getContext(){
+        return context;
+    }
 
     private String setLeftJoin(String leftTable, String rightTable){
         return "("+leftTable+") LEFT JOIN ("+rightTable+")";
@@ -109,6 +118,16 @@ public class JadwalWriter{
         }finally{
             result.close();
         }
+        Log.v("Presenter", "Total List = "+listBidang.size());
         return listBidang.toArray(new String[0]);
+    }
+
+    public void insertToTable(String tableName, HashMap<String,String> data){
+        ContentValues values = new ContentValues();
+        Set<String> keys = data.keySet();
+        for(String key : keys){
+            values.put(key, data.get(key));
+        }
+        db.insert(JadwalSQLContract.Bidang.TABLE_NAME, null, values);
     }
 }
