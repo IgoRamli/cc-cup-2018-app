@@ -36,7 +36,7 @@ import java.net.URL;
     //TODO (4) Simpan data di SQLite
     //TODO (5) Poles UI dan dokumentasi
 
-public class JadwalFragment extends Fragment {
+public class JadwalFragment extends Fragment implements JadwalContract.View {
     //private OnFragmentInteractionListener mListener;\
     private TextView errorText;
     private TextView emptyText;
@@ -45,6 +45,8 @@ public class JadwalFragment extends Fragment {
     private Spinner jadwalSpinner;
 
     private JadwalRecyclerViewAdapter adapter;
+
+    private JadwalContract.Presenter mPresenter;
 
     //String bidang sementara!!
     //TODO: Ganti string array agar sesuai dengan tabel bidang di MySQL
@@ -219,5 +221,30 @@ public class JadwalFragment extends Fragment {
             emptyText.setVisibility(TextView.INVISIBLE);
             listData.setVisibility(TextView.VISIBLE);
         }
+    }
+
+    @Override
+    public void showProgressBar(){
+        progressBar.setVisibility(ProgressBar.VISIBLE);
+    }
+    @Override
+    public void hideProgressBar(){
+        progressBar.setVisibility(ProgressBar.INVISIBLE);
+    }
+    @Override
+    public void showErrorState(){
+        errorText.setVisibility(TextView.VISIBLE);
+    }
+    @Override
+    public void hideErrorState(){
+        errorText.setVisibility(TextView.INVISIBLE);
+    }
+    @Override
+    public void showEmptyState(){
+        emptyText.setVisibility(TextView.VISIBLE);
+    }
+    @Override
+    public void hideEmptyState(){
+        emptyText.setVisibility(TextView.INVISIBLE);
     }
 }
