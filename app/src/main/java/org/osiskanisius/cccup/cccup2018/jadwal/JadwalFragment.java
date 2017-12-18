@@ -6,6 +6,7 @@ import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -48,13 +49,6 @@ public class JadwalFragment extends Fragment implements JadwalContract.View {
 
     private JadwalContract.Presenter mPresenter;
 
-    //String bidang sementara!!
-    //TODO: Ganti string array agar sesuai dengan tabel bidang di MySQL
-    String[] listBidang = {"Sepak Bola", "Futsal", "Bola Basket", "Bola Voli Putra", "Bola Voli Putri",
-                            "Bulu Tangkis Putra", "Bulu Tangkis Putri", "Tenis Meja", "Modern Dance", "Fotografi",
-                            "Pencak Silat", "Tae Kwon Do", "Paskibra", "Panjat Tebing Putra", "Panjat Tebing Putri",
-                            "Billiard", "Catur", "Band"};
-
     public JadwalFragment() {
         // Required empty public constructor
     }
@@ -75,7 +69,7 @@ public class JadwalFragment extends Fragment implements JadwalContract.View {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-
+        mPresenter = new JadwalPresenter(this);
     }
 
     @Override
@@ -88,15 +82,11 @@ public class JadwalFragment extends Fragment implements JadwalContract.View {
 
     @Override
     public void onViewCreated(View view, Bundle savedInstanceState){
-        listData = (RecyclerView) getView().findViewById(R.id.rv_jadwal);
-        errorText = (TextView) getView().findViewById(R.id.tv_error_msg);
-        emptyText = (TextView) getView().findViewById(R.id.tv_empty_msg);
-        progressBar = (ProgressBar) getView().findViewById(R.id.pb_loading_bar);
-        jadwalSpinner = (Spinner) getView().findViewById(R.id.jadwal_spinner);
+        initializeViews();
 
         //Set adapter untuk Spinner
         ArrayAdapter<String> spinnerAdapter = new ArrayAdapter<String>(getActivity(),
-                android.R.layout.simple_spinner_item, listBidang);
+                android.R.layout.simple_spinner_item, mPresenter.getListBidang());
         spinnerAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         jadwalSpinner.setAdapter(spinnerAdapter);
         jadwalSpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
@@ -110,6 +100,7 @@ public class JadwalFragment extends Fragment implements JadwalContract.View {
                 changeJadwalType(0);
             }
         });
+        Log.d("Model", "Selesai membuat adapter");
 
         //Set adapter untuk RecyclerView
         LinearLayoutManager layoutManager = new LinearLayoutManager(getActivity(),
@@ -221,6 +212,19 @@ public class JadwalFragment extends Fragment implements JadwalContract.View {
             emptyText.setVisibility(TextView.INVISIBLE);
             listData.setVisibility(TextView.VISIBLE);
         }
+    }
+
+    public void initializeViews(){
+        listData = (RecyclerView) getView().findViewById(R.id.rv_jadwal);
+        errorText = (TextView) getView().findViewById(R.id.tv_error_msg);
+        emptyText = (TextView) getView().findViewById(R.id.tv_empty_msg);
+        progressBar = (ProgressBar) getView().findViewById(R.id.pb_loading_bar);
+        jadwalSpinner = (Spinner) getView().findViewById(R.id.jadwal_spinner);
+    }
+
+    @Override
+    public Context getViewContext(){
+        return this.getContext();
     }
 
     @Override

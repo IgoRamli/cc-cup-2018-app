@@ -1,24 +1,36 @@
 package org.osiskanisius.cccup.cccup2018.model;
 
+import android.app.Application;
+import android.content.Context;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
+import android.database.sqlite.SQLiteOpenHelper;
 
 /**
  * Created by inigo on 18/12/17.
  */
 
-public class JadwalWriter {
+public class JadwalWriter{
+    private Context context;
+    private JadwalSQLOpenHelper dbHelper;
+    private SQLiteDatabase db;
+
     private String setLeftJoin(String leftTable, String rightTable){
         return "("+leftTable+") LEFT JOIN ("+rightTable+")";
     }
 
+    public JadwalWriter(Context context){
+        this.context = context;
+        dbHelper = new JadwalSQLOpenHelper(context);
+        db = dbHelper.getWritableDatabase();
+    }
+
     /**
      * Mendapatkan semua lomba dengan bidang yang sama
-     * @param db SQLiteDatabase untuk mengakses database
      * @param bidangID ID dari bidang yang lombanya ingin dicari
      * @return Cursor yang berisi semua lomba yang diinginkan (Tidak berisi peserta)
      */
-    public Cursor getAllLombaID(SQLiteDatabase db, int bidangID){
+    public Cursor getAllLombaID(int bidangID){
         return db.query(
                 JadwalSQLContract.Lomba.TABLE_NAME,
                 new String[]{JadwalSQLContract.Lomba._ID},
@@ -32,11 +44,10 @@ public class JadwalWriter {
 
     /**
      * Mendapatkan semua peserta yang akan mengikuti suatu lomba tertentu
-     * @param db SQLiteDatabase untuk menakses database
      * @param lombaID ID lomba yang hendak dicari pesertanya
      * @return Cursor yang berisi semua ID dan skor peserta yang mengikuti lomba tersebut
      */
-    public Cursor getAllPeserta(SQLiteDatabase db, int lombaID){
+    public Cursor getAllPeserta(int lombaID){
         return db.query(
                 JadwalSQLContract.LombaDetails.TABLE_NAME,
                 new String[]{
@@ -54,11 +65,10 @@ public class JadwalWriter {
     /**
      * Mendapatkan profil peserta yang diinginkan,
      * termasuk nama sekolah, kode pool, dan kelasnya di pencak silat/tae kwon do
-     * @param db SQLiteDatabase untuk mengakses database
      * @param pesertaID ID peserta yang diinginkan
      * @return Cursor yang berisi profil peserta
      */
-    public Cursor getPesertaProfile(SQLiteDatabase db, int pesertaID){
+    public Cursor getPesertaProfile(int pesertaID){
         String query = "SELECT * FROM " + setLeftJoin(
                 setLeftJoin(
                         setLeftJoin(
@@ -71,5 +81,17 @@ public class JadwalWriter {
         )
                 +" WHERE "+ JadwalSQLContract.Peserta._ID+" = "+pesertaID;
         return db.rawQuery(query, null);
+    }
+
+    public Cursor getListBidang(){
+        return db.query(
+                JadwalSQLContract.Bidang.TABLE_NAME,
+                null,
+                null,
+                null,
+                null,
+                null,
+                JadwalSQLContract.Bidang._ID
+        );
     }
 }
