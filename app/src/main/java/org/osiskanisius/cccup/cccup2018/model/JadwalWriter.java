@@ -6,6 +6,8 @@ import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 
+import java.util.ArrayList;
+
 /**
  * Created by inigo on 18/12/17.
  */
@@ -93,5 +95,20 @@ public class JadwalWriter{
                 null,
                 JadwalSQLContract.Bidang._ID
         );
+    }
+
+    public String[] getListBidangString(){
+        Cursor result = getListBidang();
+        ArrayList<String> listBidang = new ArrayList<>();
+        try{
+            while(result.moveToNext()){
+                listBidang.add(result.getString(
+                        result.getColumnIndexOrThrow(JadwalSQLContract.Bidang.COLUMN_NAMA)
+                ));
+            }
+        }finally{
+            result.close();
+        }
+        return listBidang.toArray(new String[0]);
     }
 }

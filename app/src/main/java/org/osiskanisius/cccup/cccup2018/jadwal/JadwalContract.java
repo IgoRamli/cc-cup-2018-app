@@ -18,6 +18,5 @@ public interface JadwalContract {
     }
     interface Presenter{
         String[] getListBidang();
-
     }
 }
