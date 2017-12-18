@@ -15,8 +15,14 @@ public interface JadwalContract {
         void hideErrorState();
         void showEmptyState();
         void hideEmptyState();
+        void showJadwalLomba();
+        void hideJadwalLomba();
+        void setJadwalLomba(String[] jadwalLomba);
     }
     interface Presenter{
         String[] getListBidang();
+        void changeJadwalType(int i);
+        void onPreExecute();
+        void onPostExecute(String[] hasilAkhir);
     }
 }

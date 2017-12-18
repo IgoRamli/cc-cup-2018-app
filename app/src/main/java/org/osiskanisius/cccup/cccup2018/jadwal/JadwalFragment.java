@@ -18,7 +18,7 @@ import android.widget.TextView;
 
 import org.json.JSONException;
 import org.osiskanisius.cccup.cccup2018.JadwalJsonParser;
-import org.osiskanisius.cccup.cccup2018.NetworkUtil;
+import org.osiskanisius.cccup.cccup2018.internet.NetworkUtil;
 import org.osiskanisius.cccup.cccup2018.R;
 import org.osiskanisius.cccup.cccup2018.adapter.JadwalRecyclerViewAdapter;
 
@@ -37,7 +37,8 @@ import java.net.URL;
     //TODO (4) Simpan data di SQLite
     //TODO (5) Poles UI dan dokumentasi
 
-public class JadwalFragment extends Fragment implements JadwalContract.View {
+public class JadwalFragment extends Fragment
+        implements JadwalContract.View, AdapterView.OnItemSelectedListener {
     //private OnFragmentInteractionListener mListener;\
     private TextView errorText;
     private TextView emptyText;
@@ -89,17 +90,7 @@ public class JadwalFragment extends Fragment implements JadwalContract.View {
                 android.R.layout.simple_spinner_item, mPresenter.getListBidang());
         spinnerAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         jadwalSpinner.setAdapter(spinnerAdapter);
-        jadwalSpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
-            @Override
-            public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
-                changeJadwalType(i+1);
-            }
-
-            @Override
-            public void onNothingSelected(AdapterView<?> adapterView) {
-                changeJadwalType(0);
-            }
-        });
+        jadwalSpinner.setOnItemSelectedListener(this);
         Log.d("Model", "Selesai membuat adapter");
 
         //Set adapter untuk RecyclerView
@@ -109,15 +100,6 @@ public class JadwalFragment extends Fragment implements JadwalContract.View {
         listData.setLayoutManager(layoutManager);
         listData.setHasFixedSize(true);
         listData.setAdapter(adapter);
-    }
-
-    /**
-     * Mengubah jadwal yang ditampilkan sesuai bidang pada spinner
-     * @param type setara bidangID. Bidang yang dipilih di spinner
-     */
-    void changeJadwalType(int type){
-        FetchDataTask internet = new FetchDataTask();
-        internet.execute(NetworkUtil.makeWebQuery(type));
     }
 
     /*
@@ -160,59 +142,6 @@ public class JadwalFragment extends Fragment implements JadwalContract.View {
         // TODO: Update argument type and name
         void onFragmentInteraction(Uri uri);
     }*/
-    public class FetchDataTask extends AsyncTask<URL, Void, String[]> {
-        @Override
-        public void onPreExecute(){
-            progressBar.setVisibility(ProgressBar.VISIBLE);
-        }
-
-        @Override
-        public String[] doInBackground(URL... url){
-            URL request = url[0];
-            try{
-                String result;
-                result = NetworkUtil.getResponse(request);
-                String[] hasilAkhir = JadwalJsonParser.parseSimpleJadwal(result);
-                return  hasilAkhir;
-            }catch(IOException e){
-                e.printStackTrace();
-            }catch (JSONException e){
-                e.printStackTrace();
-            }
-            return null;
-        }
-
-        @Override
-        public void onPostExecute(String[] hasilAkhir){
-            progressBar.setVisibility(ProgressBar.INVISIBLE);
-            if(hasilAkhir == null){
-                displayErrorMessage();
-            }else if(hasilAkhir.length == 0){
-                displayEmptyMessage();
-            }else{
-                displayJadwalLomba();
-                adapter.setJadwalData(hasilAkhir);
-            }
-        }
-
-        private void displayErrorMessage(){
-            errorText.setVisibility(TextView.VISIBLE);
-            emptyText.setVisibility(TextView.INVISIBLE);
-            listData.setVisibility(TextView.INVISIBLE);
-        }
-
-        private void displayEmptyMessage(){
-            errorText.setVisibility(TextView.INVISIBLE);
-            emptyText.setVisibility(TextView.VISIBLE);
-            listData.setVisibility(TextView.INVISIBLE);
-        }
-
-        private void displayJadwalLomba(){
-            errorText.setVisibility(TextView.INVISIBLE);
-            emptyText.setVisibility(TextView.INVISIBLE);
-            listData.setVisibility(TextView.VISIBLE);
-        }
-    }
 
     public void initializeViews(){
         listData = (RecyclerView) getView().findViewById(R.id.rv_jadwal);
@@ -250,5 +179,28 @@ public class JadwalFragment extends Fragment implements JadwalContract.View {
     @Override
     public void hideEmptyState(){
         emptyText.setVisibility(TextView.INVISIBLE);
+    }
+    @Override
+    public void showJadwalLomba(){
+        listData.setVisibility(RecyclerView.VISIBLE);
+    }
+    @Override
+    public void hideJadwalLomba(){
+        listData.setVisibility(RecyclerView.INVISIBLE);
+    }
+    @Override
+    public void setJadwalLomba(String[] hasilAkhir){
+        adapter.setJadwalData(hasilAkhir);
+    }
+
+
+    @Override
+    public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
+        mPresenter.changeJadwalType(i+1);
+    }
+
+    @Override
+    public void onNothingSelected(AdapterView<?> adapterView) {
+        mPresenter.changeJadwalType(0);
     }
 }

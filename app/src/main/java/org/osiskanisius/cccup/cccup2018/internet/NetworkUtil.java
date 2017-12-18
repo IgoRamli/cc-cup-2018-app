@@ -1,4 +1,4 @@
-package org.osiskanisius.cccup.cccup2018;
+package org.osiskanisius.cccup.cccup2018.internet;
 
 import android.net.Uri;
 import android.os.AsyncTask;
