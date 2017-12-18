@@ -6,9 +6,8 @@
     android:orientation="vertical"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context="org.osiskanisius.cccup.cccup2018.MainActivity">
-    <fragment
-        android:name="org.osiskanisius.cccup.cccup2018.home.HomeFragment"
+    tools:context="org.osiskanisius.cccup.cccup2018.main.MainActivity">
+    <FrameLayout
         android:id="@+id/main_fragment"
         android:layout_width="match_parent"
         android:layout_height="0dp"
