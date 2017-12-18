@@ -52,7 +52,7 @@ public class JadwalWriter {
     }
 
     /**
-     * Mendapatkan prifol peserta yang diinginkan,
+     * Mendapatkan profil peserta yang diinginkan,
      * termasuk nama sekolah, kode pool, dan kelasnya di pencak silat/tae kwon do
      * @param db SQLiteDatabase untuk mengakses database
      * @param pesertaID ID peserta yang diinginkan
