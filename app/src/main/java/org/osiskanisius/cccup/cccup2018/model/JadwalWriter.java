@@ -126,6 +126,13 @@ public class JadwalWriter{
         for(String key : keys){
             values.put(key, data.get(key));
         }
-        db.insert(JadwalSQLContract.Bidang.TABLE_NAME, null, values);
+        long flag = db.insertWithOnConflict(tableName,
+                null,
+                values,
+                SQLiteDatabase.CONFLICT_IGNORE);
+        if(flag == -1){
+            db.update(tableName, values, tableName+"ID=",
+                    new String[]{data.get(tableName+"ID")});
+        }
     }
 }

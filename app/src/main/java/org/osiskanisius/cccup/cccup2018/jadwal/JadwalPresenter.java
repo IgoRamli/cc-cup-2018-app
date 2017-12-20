@@ -1,5 +1,6 @@
 package org.osiskanisius.cccup.cccup2018.jadwal;
 
+import org.osiskanisius.cccup.cccup2018.ModelManager;
 import org.osiskanisius.cccup.cccup2018.internet.DataLoader;
 import org.osiskanisius.cccup.cccup2018.internet.FetchDataTask;
 import org.osiskanisius.cccup.cccup2018.internet.NetworkUtil;
@@ -7,19 +8,19 @@ import org.osiskanisius.cccup.cccup2018.model.JadwalWriter;
 
 public class JadwalPresenter implements JadwalContract.Presenter{
     private JadwalContract.View mView;
-    private JadwalWriter mWriter;
+    private ModelManager mModel;
     private FetchDataTask mInternet;
 
     JadwalPresenter(JadwalContract.View view){
         mView = view;
-        mWriter = new JadwalWriter(view.getViewContext());
+        mModel = new ModelManager(view.getViewContext());
         mInternet = new FetchDataTask(this);
 
     }
 
     @Override
     public String[] getListBidang(){
-        return mWriter.getListBidangString();
+        return mModel.getWriter().getListBidangString();
     }
 
     @Override
