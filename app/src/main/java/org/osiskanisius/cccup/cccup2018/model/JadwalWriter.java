@@ -8,6 +8,8 @@ import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 import android.util.Log;
 
+import org.osiskanisius.cccup.cccup2018.ModelManager;
+
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Iterator;
@@ -18,21 +20,17 @@ import java.util.Set;
  */
 
 public class JadwalWriter{
-    private Context context;
+    private ModelManager mManager;
     private JadwalSQLOpenHelper dbHelper;
     private SQLiteDatabase db;
-
-    public Context getContext(){
-        return context;
-    }
 
     private String setLeftJoin(String leftTable, String rightTable){
         return "("+leftTable+") LEFT JOIN ("+rightTable+")";
     }
 
-    public JadwalWriter(Context context){
-        this.context = context;
-        dbHelper = new JadwalSQLOpenHelper(context);
+    public JadwalWriter(ModelManager manager){
+        mManager = manager;
+        dbHelper = new JadwalSQLOpenHelper(mManager.getContext());
         db = dbHelper.getWritableDatabase();
     }
 

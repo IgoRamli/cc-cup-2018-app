@@ -7,23 +7,26 @@ import android.support.v4.content.AsyncTaskLoader;
 import android.support.v4.content.Loader;
 
 import org.osiskanisius.cccup.cccup2018.JadwalJsonParser;
+import org.osiskanisius.cccup.cccup2018.ModelManager;
 import org.osiskanisius.cccup.cccup2018.model.JadwalSQLOpenHelper;
+import org.osiskanisius.cccup.cccup2018.model.JadwalWriter;
 
 import java.net.URL;
 import java.util.HashMap;
 
 public class WebLoader implements LoaderManager.LoaderCallbacks<DataPacket> {
-    Context mContext;
+    ModelManager mManager;
 
     public static final String TABLE_NAME_KEY = "tableName";
+    public static final int LOADER_ID = 69;
 
-    public WebLoader(Context context){
-        mContext = context;
+    public WebLoader(ModelManager manager){
+        mManager = manager;
     }
 
     @Override
     public Loader<DataPacket> onCreateLoader(int id, final Bundle args) {
-        return new AsyncTaskLoader<DataPacket>(mContext) {
+        return new AsyncTaskLoader<DataPacket>(mManager.getContext()) {
             @Override
             public DataPacket loadInBackground() {
                 String tableName = args.getString(TABLE_NAME_KEY);
@@ -41,9 +44,8 @@ public class WebLoader implements LoaderManager.LoaderCallbacks<DataPacket> {
 
     @Override
     public void onLoadFinished(Loader<DataPacket> loader, DataPacket data) {
-        JadwalSQLOpenHelper dbHelper = new JadwalSQLOpenHelper(mContext);
         for(HashMap<String, String> row : data.getMainPacket()){
-            dbHelper.insertToTable(data.getTableName(), row);
+            mManager.getWriter().insertToTable(data.getTableName(), row);
         }
     }
 
