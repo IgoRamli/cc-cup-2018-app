@@ -22,6 +22,7 @@ import android.widget.TextView;
 import org.json.JSONException;
 import org.osiskanisius.cccup.cccup2018.JadwalJsonParser;
 import org.osiskanisius.cccup.cccup2018.ModelManager;
+import org.osiskanisius.cccup.cccup2018.data.Lomba;
 import org.osiskanisius.cccup.cccup2018.internet.DataPacket;
 import org.osiskanisius.cccup.cccup2018.internet.NetworkUtil;
 import org.osiskanisius.cccup.cccup2018.R;
@@ -201,7 +202,7 @@ public class JadwalFragment extends Fragment
         listData.setVisibility(RecyclerView.INVISIBLE);
     }
     @Override
-    public void setJadwalLomba(String[] hasilAkhir){
+    public void setJadwalLomba(Lomba[] hasilAkhir){
         adapter.setJadwalData(hasilAkhir);
     }
 

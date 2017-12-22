@@ -3,11 +3,12 @@ package org.osiskanisius.cccup.cccup2018.internet;
 import android.os.AsyncTask;
 
 import org.osiskanisius.cccup.cccup2018.JadwalJsonParser;
+import org.osiskanisius.cccup.cccup2018.data.Lomba;
 import org.osiskanisius.cccup.cccup2018.jadwal.JadwalContract;
 
 import java.net.URL;
 
-public class FetchDataTask extends AsyncTask<URL, Void, String[]> {
+public class FetchDataTask extends AsyncTask<URL, Void, Lomba[]> {
     private JadwalContract.Presenter mPresenter;
 
     public FetchDataTask(JadwalContract.Presenter presenter) {
@@ -20,7 +21,7 @@ public class FetchDataTask extends AsyncTask<URL, Void, String[]> {
     }
 
     @Override
-    public String[] doInBackground(URL... url) {
+    public Lomba[] doInBackground(URL... url) {
         URL request = url[0];
         try {
             String result;
@@ -33,7 +34,7 @@ public class FetchDataTask extends AsyncTask<URL, Void, String[]> {
     }
 
     @Override
-    public void onPostExecute(String[] hasilAkhir) {
+    public void onPostExecute(Lomba[] hasilAkhir) {
         mPresenter.onPostExecute(hasilAkhir);
     }
 }

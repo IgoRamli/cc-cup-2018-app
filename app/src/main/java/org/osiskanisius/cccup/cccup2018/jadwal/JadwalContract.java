@@ -3,6 +3,7 @@ package org.osiskanisius.cccup.cccup2018.jadwal;
 import android.content.Context;
 import android.support.v4.app.LoaderManager;
 
+import org.osiskanisius.cccup.cccup2018.data.Lomba;
 import org.osiskanisius.cccup.cccup2018.internet.DataPacket;
 
 /**
@@ -21,7 +22,7 @@ public interface JadwalContract {
         void hideEmptyState();
         void showJadwalLomba();
         void hideJadwalLomba();
-        void setJadwalLomba(String[] jadwalLomba);
+        void setJadwalLomba(Lomba[] jadwalLomba);
 
         void loadData(String tableName,
                       Boolean forceLoad,
@@ -31,7 +32,7 @@ public interface JadwalContract {
         String[] getListBidang();
         void changeJadwalType(int i);
         void onPreExecute();
-        void onPostExecute(String[] hasilAkhir);
+        void onPostExecute(Lomba[] hasilAkhir);
         void notifySQLChange(String tableName);
         int isBidangLoaded();
         void onItemSelected(int i);

@@ -3,6 +3,7 @@ package org.osiskanisius.cccup.cccup2018.jadwal;
 import android.util.Log;
 
 import org.osiskanisius.cccup.cccup2018.ModelManager;
+import org.osiskanisius.cccup.cccup2018.data.Lomba;
 import org.osiskanisius.cccup.cccup2018.internet.DataLoader;
 import org.osiskanisius.cccup.cccup2018.internet.FetchDataTask;
 import org.osiskanisius.cccup.cccup2018.internet.NetworkUtil;
@@ -54,7 +55,7 @@ public class JadwalPresenter implements JadwalContract.Presenter{
     }
 
     @Override
-    public void onPostExecute(String[] hasilAkhir){
+    public void onPostExecute(Lomba[] hasilAkhir){
         mView.hideProgressBar();
         if(hasilAkhir == null){
             showErrorState();

@@ -10,6 +10,7 @@ import android.widget.Toast;
 
 import org.osiskanisius.cccup.cccup2018.DetailActivity;
 import org.osiskanisius.cccup.cccup2018.R;
+import org.osiskanisius.cccup.cccup2018.data.Lomba;
 
 /**
  * Created by inigo on 13/12/17.
@@ -17,7 +18,7 @@ import org.osiskanisius.cccup.cccup2018.R;
 
 public class JadwalRecyclerViewAdapter
         extends RecyclerView.Adapter<JadwalRecyclerViewAdapter.JadwalViewHolder> {
-    String[] jadwalData;
+    Lomba[] jadwalData;
     private final View.OnClickListener mOnClickListener = new View.OnClickListener() {
         @Override
         public void onClick(View view) {
@@ -62,14 +63,13 @@ public class JadwalRecyclerViewAdapter
             titleTextView = (TextView) view.findViewById(R.id.tv_title);
         }
 
-        void bind(String data){
-            String[] subData = data.split("\n", 2);
-            titleTextView.setText(subData[0]);
-            jadwalTextView.setText(subData[1]);
+        void bind(Lomba data){
+            titleTextView.setText(data.getNamaLomba());
+            jadwalTextView.setText("Description");
         }
     }
 
-    public void setJadwalData(String[] jadwalData){
+    public void setJadwalData(Lomba[] jadwalData){
         this.jadwalData = jadwalData;
         notifyDataSetChanged();
     }
