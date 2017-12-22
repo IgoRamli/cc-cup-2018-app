@@ -1,11 +1,14 @@
 package org.osiskanisius.cccup.cccup2018.jadwal;
 
+import android.support.v4.app.LoaderManager;
 import android.content.Context;
+import android.content.Loader;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -17,9 +20,12 @@ import android.widget.TextView;
 
 import org.json.JSONException;
 import org.osiskanisius.cccup.cccup2018.JadwalJsonParser;
-import org.osiskanisius.cccup.cccup2018.NetworkUtil;
+import org.osiskanisius.cccup.cccup2018.ModelManager;
+import org.osiskanisius.cccup.cccup2018.internet.DataPacket;
+import org.osiskanisius.cccup.cccup2018.internet.NetworkUtil;
 import org.osiskanisius.cccup.cccup2018.R;
 import org.osiskanisius.cccup.cccup2018.adapter.JadwalRecyclerViewAdapter;
+import org.osiskanisius.cccup.cccup2018.internet.WebLoader;
 
 import java.io.IOException;
 import java.net.URL;
@@ -31,27 +37,23 @@ import java.net.URL;
  * Use the {@link JadwalFragment#newInstance} factory method to
  * create an instance of this fragment.
  */
-
-    //TODO (3) Perbaiki layout (RecyclerView?)
-    //TODO (4) Simpan data di SQLite
     //TODO (5) Poles UI dan dokumentasi
 
-public class JadwalFragment extends Fragment {
+public class JadwalFragment extends Fragment
+        implements JadwalContract.View, AdapterView.OnItemSelectedListener {
     //private OnFragmentInteractionListener mListener;\
     private TextView errorText;
     private TextView emptyText;
     private RecyclerView listData;
     private ProgressBar progressBar;
     private Spinner jadwalSpinner;
+    private static final String[] emptySpinner = {"Data not available"};
+
+    private String[] mListBidang;
 
     private JadwalRecyclerViewAdapter adapter;
 
-    //String bidang sementara!!
-    //TODO: Ganti string array agar sesuai dengan tabel bidang di MySQL
-    String[] listBidang = {"Sepak Bola", "Futsal", "Bola Basket", "Bola Voli Putra", "Bola Voli Putri",
-                            "Bulu Tangkis Putra", "Bulu Tangkis Putri", "Tenis Meja", "Modern Dance", "Fotografi",
-                            "Pencak Silat", "Tae Kwon Do", "Paskibra", "Panjat Tebing Putra", "Panjat Tebing Putri",
-                            "Billiard", "Catur", "Band"};
+    private JadwalContract.Presenter mPresenter;
 
     public JadwalFragment() {
         // Required empty public constructor
@@ -73,7 +75,7 @@ public class JadwalFragment extends Fragment {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-
+        mPresenter = new JadwalPresenter(this);
     }
 
     @Override
@@ -86,28 +88,11 @@ public class JadwalFragment extends Fragment {
 
     @Override
     public void onViewCreated(View view, Bundle savedInstanceState){
-        listData = (RecyclerView) getView().findViewById(R.id.rv_jadwal);
-        errorText = (TextView) getView().findViewById(R.id.tv_error_msg);
-        emptyText = (TextView) getView().findViewById(R.id.tv_empty_msg);
-        progressBar = (ProgressBar) getView().findViewById(R.id.pb_loading_bar);
-        jadwalSpinner = (Spinner) getView().findViewById(R.id.jadwal_spinner);
+        initializeViews();
 
         //Set adapter untuk Spinner
-        ArrayAdapter<String> spinnerAdapter = new ArrayAdapter<String>(getActivity(),
-                android.R.layout.simple_spinner_item, listBidang);
-        spinnerAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-        jadwalSpinner.setAdapter(spinnerAdapter);
-        jadwalSpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
-            @Override
-            public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
-                changeJadwalType(i+1);
-            }
-
-            @Override
-            public void onNothingSelected(AdapterView<?> adapterView) {
-                changeJadwalType(0);
-            }
-        });
+        setSpinnerAdapter(mPresenter.getListBidang());
+        mPresenter.showLoadingState();
 
         //Set adapter untuk RecyclerView
         LinearLayoutManager layoutManager = new LinearLayoutManager(getActivity(),
@@ -116,15 +101,6 @@ public class JadwalFragment extends Fragment {
         listData.setLayoutManager(layoutManager);
         listData.setHasFixedSize(true);
         listData.setAdapter(adapter);
-    }
-
-    /**
-     * Mengubah jadwal yang ditampilkan sesuai bidang pada spinner
-     * @param type setara bidangID. Bidang yang dipilih di spinner
-     */
-    void changeJadwalType(int type){
-        FetchDataTask internet = new FetchDataTask();
-        internet.execute(NetworkUtil.makeWebQuery(type));
     }
 
     /*
@@ -167,57 +143,85 @@ public class JadwalFragment extends Fragment {
         // TODO: Update argument type and name
         void onFragmentInteraction(Uri uri);
     }*/
-    public class FetchDataTask extends AsyncTask<URL, Void, String[]> {
-        @Override
-        public void onPreExecute(){
-            progressBar.setVisibility(ProgressBar.VISIBLE);
-        }
 
-        @Override
-        public String[] doInBackground(URL... url){
-            URL request = url[0];
-            try{
-                String result;
-                result = NetworkUtil.getResponse(request);
-                String[] hasilAkhir = JadwalJsonParser.parseSimpleJadwal(result);
-                return  hasilAkhir;
-            }catch(IOException e){
-                e.printStackTrace();
-            }catch (JSONException e){
-                e.printStackTrace();
-            }
-            return null;
-        }
+    public void initializeViews(){
+        listData = (RecyclerView) getView().findViewById(R.id.rv_jadwal);
+        errorText = (TextView) getView().findViewById(R.id.tv_error_msg);
+        emptyText = (TextView) getView().findViewById(R.id.tv_empty_msg);
+        progressBar = (ProgressBar) getView().findViewById(R.id.pb_loading_bar);
+        jadwalSpinner = (Spinner) getView().findViewById(R.id.jadwal_spinner);
+    }
 
-        @Override
-        public void onPostExecute(String[] hasilAkhir){
-            progressBar.setVisibility(ProgressBar.INVISIBLE);
-            if(hasilAkhir == null){
-                displayErrorMessage();
-            }else if(hasilAkhir.length == 0){
-                displayEmptyMessage();
-            }else{
-                displayJadwalLomba();
-                adapter.setJadwalData(hasilAkhir);
-            }
-        }
+    @Override
+    public Context getViewContext(){
+        return this.getContext();
+    }
 
-        private void displayErrorMessage(){
-            errorText.setVisibility(TextView.VISIBLE);
-            emptyText.setVisibility(TextView.INVISIBLE);
-            listData.setVisibility(TextView.INVISIBLE);
-        }
+    @Override
+    public void setSpinnerAdapter(String[] listBidang){
+        ArrayAdapter<String> spinnerAdapter = new ArrayAdapter<String>(getActivity(),
+                android.R.layout.simple_spinner_item, listBidang);
+        spinnerAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        jadwalSpinner.setAdapter(spinnerAdapter);
+        jadwalSpinner.setOnItemSelectedListener(this);
 
-        private void displayEmptyMessage(){
-            errorText.setVisibility(TextView.INVISIBLE);
-            emptyText.setVisibility(TextView.VISIBLE);
-            listData.setVisibility(TextView.INVISIBLE);
-        }
+    }
 
-        private void displayJadwalLomba(){
-            errorText.setVisibility(TextView.INVISIBLE);
-            emptyText.setVisibility(TextView.INVISIBLE);
-            listData.setVisibility(TextView.VISIBLE);
-        }
+    @Override
+    public void showProgressBar(){
+        progressBar.setVisibility(ProgressBar.VISIBLE);
+    }
+    @Override
+    public void hideProgressBar(){
+        progressBar.setVisibility(ProgressBar.INVISIBLE);
+    }
+    @Override
+    public void showErrorState(){
+        errorText.setVisibility(TextView.VISIBLE);
+    }
+    @Override
+    public void hideErrorState(){
+        errorText.setVisibility(TextView.INVISIBLE);
+    }
+    @Override
+    public void showEmptyState(){
+        emptyText.setVisibility(TextView.VISIBLE);
+    }
+    @Override
+    public void hideEmptyState(){
+        emptyText.setVisibility(TextView.INVISIBLE);
+    }
+    @Override
+    public void showJadwalLomba(){
+        listData.setVisibility(RecyclerView.VISIBLE);
+    }
+    @Override
+    public void hideJadwalLomba(){
+        listData.setVisibility(RecyclerView.INVISIBLE);
+    }
+    @Override
+    public void setJadwalLomba(String[] hasilAkhir){
+        adapter.setJadwalData(hasilAkhir);
+    }
+
+
+    @Override
+    public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
+        mPresenter.onItemSelected(i);
+    }
+
+    @Override
+    public void onNothingSelected(AdapterView<?> adapterView) {
+        mPresenter.onNothingSelected();
+    }
+
+    @Override
+    public void loadData(String tableName,
+                         Boolean forceLoad,
+                         LoaderManager.LoaderCallbacks callback){
+        Bundle args = new Bundle();
+        args.putString(WebLoader.TABLE_NAME_KEY, tableName);
+        args.putBoolean(WebLoader.FORCE_LOAD, forceLoad);
+        getLoaderManager().initLoader(WebLoader.LOADER_ID, args, callback);
     }
 }

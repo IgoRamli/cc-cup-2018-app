@@ -1,4 +1,4 @@
-package org.osiskanisius.cccup.cccup2018;
+package org.osiskanisius.cccup.cccup2018.internet;
 
 import android.net.Uri;
 import android.os.AsyncTask;
@@ -23,7 +23,9 @@ import java.util.Scanner;
 
 public class NetworkUtil {
     private static final String CC_CUP_BASE_URL = "http://cccup.osiskanisius.org/admin/test_join";
+    private static final String CC_CUP_BASE_TABLE_URL = "http://cccup.osiskanisius.org/app_service/get_list";
     private static final String BIDANG_ID_PARAM = "bidangID";
+    private static final String TABLE_PARAM = "tabel";
 
     public static URL makeWebQuery(int bidangID){
         Uri uri = Uri.parse(CC_CUP_BASE_URL).buildUpon()
@@ -37,6 +39,19 @@ public class NetworkUtil {
             e.printStackTrace();
         }
         return null;
+    }
+
+    public static URL makeTableQuery(String tableName){
+        Uri uri = Uri.parse(CC_CUP_BASE_TABLE_URL).buildUpon()
+                .appendQueryParameter(TABLE_PARAM, tableName)
+                .build();
+        URL url = null;
+        try{
+            url = new URL(uri.toString());
+        }catch (MalformedURLException e){
+            e.printStackTrace();
+        }
+        return url;
     }
 
     public static String getResponse(URL url) throws IOException{

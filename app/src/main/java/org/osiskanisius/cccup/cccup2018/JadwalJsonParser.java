@@ -4,6 +4,8 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.Iterator;
 
 /**
@@ -61,6 +63,22 @@ public class JadwalJsonParser {
             result += "\n"+namaLokasi;
             hasilAkhir[idx] = result;
             idx++;
+        }
+        return hasilAkhir;
+    }
+
+    public static ArrayList<HashMap<String, String>> parseTable(String json) throws JSONException{
+        JSONArray rows = new JSONArray(json);
+        ArrayList<HashMap<String, String>> hasilAkhir = new ArrayList<>();
+        for(int i = 0; i < rows.length(); i++){
+            JSONObject row = rows.getJSONObject(i);
+            Iterator<String> keys = row.keys();
+            HashMap<String, String> rowResult = new HashMap<>();
+            while(keys.hasNext()){
+                String key = keys.next();
+                rowResult.put(key, row.getString(key));
+            }
+            hasilAkhir.add(rowResult);
         }
         return hasilAkhir;
     }
