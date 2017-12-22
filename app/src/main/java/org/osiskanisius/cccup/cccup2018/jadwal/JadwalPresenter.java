@@ -7,6 +7,7 @@ import org.osiskanisius.cccup.cccup2018.internet.DataLoader;
 import org.osiskanisius.cccup.cccup2018.internet.FetchDataTask;
 import org.osiskanisius.cccup.cccup2018.internet.NetworkUtil;
 import org.osiskanisius.cccup.cccup2018.model.JadwalSQLContract;
+import org.osiskanisius.cccup.cccup2018.model.JadwalSQLOpenHelper;
 import org.osiskanisius.cccup.cccup2018.model.JadwalWriter;
 
 public class JadwalPresenter implements JadwalContract.Presenter{
@@ -38,9 +39,13 @@ public class JadwalPresenter implements JadwalContract.Presenter{
     }
 
     @Override
-    public void changeJadwalType(int i){
+    public void changeJadwalType(int i){/*
         mInternet = new FetchDataTask(this);
-        mInternet.execute(NetworkUtil.makeWebQuery(i));
+        mInternet.execute(NetworkUtil.makeWebQuery(i));*/
+        //Asumsikan Belum ada data, jalankan loader
+        loadAllData();
+        //Sudah ada data, ambil dari SQL
+
     }
 
     @Override
@@ -139,5 +144,22 @@ public class JadwalPresenter implements JadwalContract.Presenter{
         mView.hideErrorState();
         mView.hideJadwalLomba();
         mView.showProgressBar();
+    }
+
+    public void loadAllData(){
+        String[] daftarTabel = {
+                JadwalSQLContract.Bidang.TABLE_NAME,
+                JadwalSQLContract.Sekolah.TABLE_NAME,
+                JadwalSQLContract.Peserta.TABLE_NAME,
+                JadwalSQLContract.Lokasi.TABLE_NAME,
+                JadwalSQLContract.Lomba.TABLE_NAME,
+                JadwalSQLContract.LombaDetails.TABLE_NAME,
+                JadwalSQLContract.PoolDetails.TABLE_NAME,
+                JadwalSQLContract.PencaksilatDetails.TABLE_NAME,
+                JadwalSQLContract.TaekwondoDetails.TABLE_NAME
+        };
+        for(String tabel : daftarTabel){
+            mView.loadData(tabel, true, mModel.getLoader());
+        }
     }
 }
