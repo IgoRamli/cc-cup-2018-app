@@ -14,6 +14,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
+import android.widget.LinearLayout;
 import android.widget.ProgressBar;
 import android.widget.Spinner;
 import android.widget.TextView;
@@ -45,7 +46,7 @@ public class JadwalFragment extends Fragment
     private TextView errorText;
     private TextView emptyText;
     private RecyclerView listData;
-    private ProgressBar progressBar;
+    private LinearLayout progressBar;
     private Spinner jadwalSpinner;
     private static final String[] emptySpinner = {"Data not available"};
 
@@ -148,7 +149,7 @@ public class JadwalFragment extends Fragment
         listData = (RecyclerView) getView().findViewById(R.id.rv_jadwal);
         errorText = (TextView) getView().findViewById(R.id.tv_error_msg);
         emptyText = (TextView) getView().findViewById(R.id.tv_empty_msg);
-        progressBar = (ProgressBar) getView().findViewById(R.id.pb_loading_bar);
+        progressBar = (LinearLayout) getView().findViewById(R.id.pb_loading_bar);
         jadwalSpinner = (Spinner) getView().findViewById(R.id.jadwal_spinner);
     }
 
@@ -169,11 +170,11 @@ public class JadwalFragment extends Fragment
 
     @Override
     public void showProgressBar(){
-        progressBar.setVisibility(ProgressBar.VISIBLE);
+        progressBar.setVisibility(LinearLayout.VISIBLE);
     }
     @Override
     public void hideProgressBar(){
-        progressBar.setVisibility(ProgressBar.INVISIBLE);
+        progressBar.setVisibility(LinearLayout.INVISIBLE);
     }
     @Override
     public void showErrorState(){
