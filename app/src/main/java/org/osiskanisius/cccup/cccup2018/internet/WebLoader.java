@@ -18,7 +18,9 @@ public class WebLoader implements LoaderManager.LoaderCallbacks<DataPacket> {
     ModelManager mManager;
 
     public static final String TABLE_NAME_KEY = "tableName";
+    public static final String FORCE_LOAD = "forceLoad";
     public static final int LOADER_ID = 69;
+
 
     public WebLoader(ModelManager manager){
         mManager = manager;
@@ -27,6 +29,17 @@ public class WebLoader implements LoaderManager.LoaderCallbacks<DataPacket> {
     @Override
     public Loader<DataPacket> onCreateLoader(int id, final Bundle args) {
         return new AsyncTaskLoader<DataPacket>(mManager.getContext()) {
+            @Override
+            public void onStartLoading(){
+                boolean forceLoad = args.getBoolean(FORCE_LOAD, false);
+                String tableName = args.getString(TABLE_NAME_KEY);
+                if(forceLoad || !mManager.isDataAvailable(tableName)){
+                    forceLoad();
+                }else{
+                    deliverResult(mManager.getCachedData());
+                }
+            }
+
             @Override
             public DataPacket loadInBackground() {
                 String tableName = args.getString(TABLE_NAME_KEY);
@@ -39,14 +52,18 @@ public class WebLoader implements LoaderManager.LoaderCallbacks<DataPacket> {
                 }
                 return null;
             }
+
+            @Override
+            public void deliverResult(DataPacket result){
+                super.deliverResult(result);
+            }
         };
     }
 
     @Override
     public void onLoadFinished(Loader<DataPacket> loader, DataPacket data) {
-        for(HashMap<String, String> row : data.getMainPacket()){
-            mManager.getWriter().insertToTable(data.getTableName(), row);
-        }
+        mManager.saveAndInsertData(data);
+        mManager.getPresenter().notifySQLChange(data.getTableName());
     }
 
     @Override

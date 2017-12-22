@@ -108,8 +108,6 @@ public class JadwalSQLOpenHelper extends SQLiteOpenHelper {
         + ") REFERENCES " + JadwalSQLContract.Peserta.TABLE_NAME
         + "(" + JadwalSQLContract.Peserta._ID + ")"
         + ");");
-
-        populateData();
     }
 
     @Override

@@ -4,6 +4,7 @@ import org.osiskanisius.cccup.cccup2018.ModelManager;
 import org.osiskanisius.cccup.cccup2018.internet.DataLoader;
 import org.osiskanisius.cccup.cccup2018.internet.FetchDataTask;
 import org.osiskanisius.cccup.cccup2018.internet.NetworkUtil;
+import org.osiskanisius.cccup.cccup2018.model.JadwalSQLContract;
 import org.osiskanisius.cccup.cccup2018.model.JadwalWriter;
 
 public class JadwalPresenter implements JadwalContract.Presenter{
@@ -13,14 +14,20 @@ public class JadwalPresenter implements JadwalContract.Presenter{
 
     JadwalPresenter(JadwalContract.View view){
         mView = view;
-        mModel = new ModelManager(view.getViewContext());
+        mModel = new ModelManager(view.getViewContext(), this);
         mInternet = new FetchDataTask(this);
-
     }
 
     @Override
     public String[] getListBidang(){
-        return mModel.getWriter().getListBidangString();
+        if(!mModel.isDataAvailable(JadwalSQLContract.Bidang.TABLE_NAME)){
+            mView.loadData(JadwalSQLContract.Bidang.TABLE_NAME,
+                    true,
+                    mModel.getLoader());
+            return null;
+        }else {
+            return mModel.getWriter().getListBidangString();
+        }
     }
 
     @Override
@@ -50,6 +57,17 @@ public class JadwalPresenter implements JadwalContract.Presenter{
             mView.hideErrorState();
             mView.showJadwalLomba();
             mView.setJadwalLomba(hasilAkhir);
+        }
+    }
+
+    @Override
+    public void notifySQLChange(String tableName){
+        if(tableName.equals(JadwalSQLContract.Bidang.TABLE_NAME)){
+            //Update spinner
+            mView.setSpinnerAdapter(getListBidang());
+            changeJadwalType(1);
+        }else{
+            //Default, do nothing
         }
     }
 }

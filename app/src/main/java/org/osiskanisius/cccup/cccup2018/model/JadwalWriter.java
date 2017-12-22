@@ -125,14 +125,17 @@ public class JadwalWriter{
         Set<String> keys = data.keySet();
         for(String key : keys){
             values.put(key, data.get(key));
+            Log.d(getClass().getName(), "Memasukkan value ("+key+", "+data.get(key)+")");
         }
         long flag = db.insertWithOnConflict(tableName,
                 null,
                 values,
-                SQLiteDatabase.CONFLICT_IGNORE);
-        if(flag == -1){
-            db.update(tableName, values, tableName+"ID=",
-                    new String[]{data.get(tableName+"ID")});
-        }
+                SQLiteDatabase.CONFLICT_REPLACE);
+    }
+
+    public int getTableCount(String tableName){
+        Cursor result =  db.rawQuery("SELECT count(*) FROM "+tableName, null);
+        result.moveToFirst();
+        return result.getInt(0);
     }
 }

@@ -50,8 +50,8 @@ public class MainActivity extends FragmentActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        JadwalSQLOpenHelper helper = new JadwalSQLOpenHelper(this);
-        helper.populateData();
+        //JadwalSQLOpenHelper helper = new JadwalSQLOpenHelper(this);
+        //helper.populateData();
         fragmentManager = getSupportFragmentManager();
 
         BottomNavigationView navigation = (BottomNavigationView) findViewById(R.id.navigation);

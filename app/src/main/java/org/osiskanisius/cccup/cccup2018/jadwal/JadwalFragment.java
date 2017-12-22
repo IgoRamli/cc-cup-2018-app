@@ -1,6 +1,8 @@
 package org.osiskanisius.cccup.cccup2018.jadwal;
 
+import android.support.v4.app.LoaderManager;
 import android.content.Context;
+import android.content.Loader;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
@@ -18,9 +20,12 @@ import android.widget.TextView;
 
 import org.json.JSONException;
 import org.osiskanisius.cccup.cccup2018.JadwalJsonParser;
+import org.osiskanisius.cccup.cccup2018.ModelManager;
+import org.osiskanisius.cccup.cccup2018.internet.DataPacket;
 import org.osiskanisius.cccup.cccup2018.internet.NetworkUtil;
 import org.osiskanisius.cccup.cccup2018.R;
 import org.osiskanisius.cccup.cccup2018.adapter.JadwalRecyclerViewAdapter;
+import org.osiskanisius.cccup.cccup2018.internet.WebLoader;
 
 import java.io.IOException;
 import java.net.URL;
@@ -32,9 +37,6 @@ import java.net.URL;
  * Use the {@link JadwalFragment#newInstance} factory method to
  * create an instance of this fragment.
  */
-
-    //TODO (3) Perbaiki layout (RecyclerView?)
-    //TODO (4) Simpan data di SQLite
     //TODO (5) Poles UI dan dokumentasi
 
 public class JadwalFragment extends Fragment
@@ -45,6 +47,9 @@ public class JadwalFragment extends Fragment
     private RecyclerView listData;
     private ProgressBar progressBar;
     private Spinner jadwalSpinner;
+    private static final String[] emptySpinner = {"Data not available"};
+
+    private String[] mListBidang;
 
     private JadwalRecyclerViewAdapter adapter;
 
@@ -86,12 +91,12 @@ public class JadwalFragment extends Fragment
         initializeViews();
 
         //Set adapter untuk Spinner
-        ArrayAdapter<String> spinnerAdapter = new ArrayAdapter<String>(getActivity(),
-                android.R.layout.simple_spinner_item, mPresenter.getListBidang());
-        spinnerAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-        jadwalSpinner.setAdapter(spinnerAdapter);
-        jadwalSpinner.setOnItemSelectedListener(this);
-        Log.d("Model", "Selesai membuat adapter");
+        String[] listBidang = mPresenter.getListBidang();
+        if(listBidang == null){
+            setSpinnerAdapter(emptySpinner);
+        }else{
+            setSpinnerAdapter(listBidang);
+        }
 
         //Set adapter untuk RecyclerView
         LinearLayoutManager layoutManager = new LinearLayoutManager(getActivity(),
@@ -157,6 +162,16 @@ public class JadwalFragment extends Fragment
     }
 
     @Override
+    public void setSpinnerAdapter(String[] listBidang){
+        ArrayAdapter<String> spinnerAdapter = new ArrayAdapter<String>(getActivity(),
+                android.R.layout.simple_spinner_item, listBidang);
+        spinnerAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        jadwalSpinner.setAdapter(spinnerAdapter);
+        jadwalSpinner.setOnItemSelectedListener(this);
+
+    }
+
+    @Override
     public void showProgressBar(){
         progressBar.setVisibility(ProgressBar.VISIBLE);
     }
@@ -202,5 +217,15 @@ public class JadwalFragment extends Fragment
     @Override
     public void onNothingSelected(AdapterView<?> adapterView) {
         mPresenter.changeJadwalType(0);
+    }
+
+    @Override
+    public void loadData(String tableName,
+                         Boolean forceLoad,
+                         LoaderManager.LoaderCallbacks callback){
+        Bundle args = new Bundle();
+        args.putString(WebLoader.TABLE_NAME_KEY, tableName);
+        args.putBoolean(WebLoader.FORCE_LOAD, forceLoad);
+        getLoaderManager().initLoader(WebLoader.LOADER_ID, args, callback);
     }
 }
