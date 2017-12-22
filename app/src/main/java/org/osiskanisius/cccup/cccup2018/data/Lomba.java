@@ -1,5 +1,6 @@
 package org.osiskanisius.cccup.cccup2018.data;
 
+import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
@@ -12,7 +13,7 @@ public class Lomba {
     private String namaLomba = null;
     private Date waktuMulai = null;
     private ArrayList<LombaDetails> peserta = new ArrayList<>();
-    private static final SimpleDateFormat formatter = new SimpleDateFormat("yyyy-mm-dd");
+    private static final SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd-HH:mm:ss");
 
     public Lomba(String namaLomba, String waktuMulai){
         this.namaLomba = namaLomba;
@@ -39,6 +40,10 @@ public class Lomba {
         }
     }
 
+    public void addPeserta(LombaDetails peserta){
+        this.peserta.add(peserta);
+    }
+
     public ArrayList<LombaDetails> getPeserta(){
         return peserta;
     }
@@ -47,7 +52,7 @@ public class Lomba {
         this.namaLomba = namaLomba;
     }
 
-    public void setWaktuMulai(String waktuMulai) throws Exception{
+    public void setWaktuMulai(String waktuMulai) throws ParseException{
         this.waktuMulai = formatter.parse(waktuMulai);
     }
 }
