@@ -91,12 +91,8 @@ public class JadwalFragment extends Fragment
         initializeViews();
 
         //Set adapter untuk Spinner
-        String[] listBidang = mPresenter.getListBidang();
-        if(listBidang == null){
-            setSpinnerAdapter(emptySpinner);
-        }else{
-            setSpinnerAdapter(listBidang);
-        }
+        setSpinnerAdapter(mPresenter.getListBidang());
+        mPresenter.showLoadingState();
 
         //Set adapter untuk RecyclerView
         LinearLayoutManager layoutManager = new LinearLayoutManager(getActivity(),
@@ -211,12 +207,12 @@ public class JadwalFragment extends Fragment
 
     @Override
     public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
-        mPresenter.changeJadwalType(i+1);
+        mPresenter.onItemSelected(i);
     }
 
     @Override
     public void onNothingSelected(AdapterView<?> adapterView) {
-        mPresenter.changeJadwalType(0);
+        mPresenter.onNothingSelected();
     }
 
     @Override

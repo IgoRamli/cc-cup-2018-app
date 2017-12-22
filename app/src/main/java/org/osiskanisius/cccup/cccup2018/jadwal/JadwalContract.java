@@ -33,5 +33,12 @@ public interface JadwalContract {
         void onPreExecute();
         void onPostExecute(String[] hasilAkhir);
         void notifySQLChange(String tableName);
+        int isBidangLoaded();
+        void onItemSelected(int i);
+        void onNothingSelected();
+        void showErrorState();
+        void showEmptyState();
+        void showJadwalData();
+        void showLoadingState();
     }
 }
