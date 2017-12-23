@@ -49,7 +49,7 @@ public class JadwalJsonParser {
             Lomba result = new Lomba();
             JSONObject dataLomba = daftarLomba.getJSONObject(key);
             result.setNamaLomba(dataLomba.getString(NAMA_LOMBA));
-            String waktu = dataLomba.getString(TANGGAL_LOMBA)+"-"+dataLomba.getString(WAKTU_LOMBA);
+            String waktu = dataLomba.getString(TANGGAL_LOMBA)+" "+dataLomba.getString(WAKTU_LOMBA);
             result.setWaktuMulai(waktu);
 
             JSONArray daftarPeserta = dataLomba.getJSONArray(DAFTAR_PESERTA);

@@ -19,17 +19,15 @@ import org.osiskanisius.cccup.cccup2018.data.Lomba;
 
 public class JadwalRecyclerViewAdapter
         extends RecyclerView.Adapter<JadwalRecyclerViewAdapter.JadwalViewHolder> {
-    Lomba[] jadwalData;
+    private Lomba[] jadwalData;
+    private RecyclerView parent;
     private final View.OnClickListener mOnClickListener = new View.OnClickListener() {
         @Override
         public void onClick(View view) {
             Intent gotoDetail = new Intent(view.getContext(), DetailActivity.class);
-            TextView mTitle = (TextView) view.findViewById(R.id.tv_title);
-            TextView mDesc = (TextView) view.findViewById(R.id.tv_jadwal);
-            String dataTitle = mTitle.getText().toString();
-            String dataDesc = mDesc.getText().toString();
-            gotoDetail.putExtra(Intent.EXTRA_TITLE, dataTitle);
-            gotoDetail.putExtra(Intent.EXTRA_TEXT, dataDesc);
+            int position = parent.getChildLayoutPosition(view);
+            gotoDetail.putExtra(Intent.EXTRA_TEXT, jadwalData[position]);
+            Log.d("Presenter", "Sent: "+jadwalData[position].toString());
             view.getContext().startActivity(gotoDetail);
             //Toast.makeText(view.getContext(), "Item selected", Toast.LENGTH_LONG).show();
         }
@@ -38,6 +36,7 @@ public class JadwalRecyclerViewAdapter
     @Override
     public JadwalViewHolder onCreateViewHolder(ViewGroup viewGroup, int i){
         LayoutInflater inflater = LayoutInflater.from(viewGroup.getContext());
+        parent = (RecyclerView) viewGroup;
         View view = inflater.inflate(R.layout.jadwal_list_item, viewGroup, false);
         JadwalViewHolder viewHolder = new JadwalViewHolder(view);
         view.setOnClickListener(mOnClickListener);

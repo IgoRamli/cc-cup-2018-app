@@ -91,9 +91,9 @@ public class LombaDetails implements Parcelable{
     @Override
     public String toString(){
         StringBuilder builder = new StringBuilder()
-                .append("\t"+namaPeserta)
-                .append("\t"+namaSekolah)
-                .append("\t"+skorPeserta);
+                .append("\t"+namaPeserta+"\n")
+                .append("\t"+namaSekolah+"\n")
+                .append("\t"+skorPeserta+"\n");
         return builder.toString();
     }
 }

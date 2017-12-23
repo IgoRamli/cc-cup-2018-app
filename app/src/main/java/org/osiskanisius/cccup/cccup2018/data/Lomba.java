@@ -9,6 +9,7 @@ import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
 import java.util.Locale;
 
 /**
@@ -19,7 +20,7 @@ public class Lomba implements Parcelable{
     private String namaLomba = "TBA";
     private Date waktuMulai = null;
     private ArrayList<LombaDetails> peserta = new ArrayList<>();
-    private static final SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd-HH:mm:ss", Locale.US);
+    private static final SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss", Locale.US);
 
     public Lomba(){}
 
@@ -36,7 +37,7 @@ public class Lomba implements Parcelable{
         try{
             namaLomba = in.readString();
             waktuMulai = formatter.parse(in.readString());
-            peserta = in.createTypedArrayList(LombaDetails.CREATOR);
+            peserta = in.readArrayList(LombaDetails.class.getClassLoader());
         }catch (ParseException e){
             e.printStackTrace();
         }
@@ -66,7 +67,7 @@ public class Lomba implements Parcelable{
         if(waktuMulai == null){
             return "TBA";
         }else{
-            return waktuMulai.toString();
+            return formatter.format(waktuMulai);
         }
     }
 
@@ -93,17 +94,17 @@ public class Lomba implements Parcelable{
 
     @Override
     public void writeToParcel(Parcel parcel, int i) {
-        parcel.writeString(this.namaLomba);
-        parcel.writeString(this.waktuMulai.toString());
+        parcel.writeString(getNamaLomba());
+        parcel.writeString(getWaktuMulai());
         parcel.writeList(this.peserta);
     }
 
     @Override
     public String toString(){
         StringBuilder builder = new StringBuilder();
-        builder.append(waktuMulai.toString()+"\n");
+        builder.append(getWaktuMulai()+"\n");
         for(LombaDetails row : peserta){
-            builder.append(row.toString());
+            builder.append("->"+row.toString());
         }
         return builder.toString();
     }
