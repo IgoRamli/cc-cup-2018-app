@@ -2,6 +2,7 @@ package org.osiskanisius.cccup.cccup2018.adapter;
 
 import android.content.Intent;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -46,6 +47,7 @@ public class JadwalRecyclerViewAdapter
 
     @Override
     public void onBindViewHolder(JadwalViewHolder viewHolder, int i){
+        Log.d("Presenter", "Binding data number "+i);
         viewHolder.bind(jadwalData[i]);
     }
 
@@ -64,8 +66,12 @@ public class JadwalRecyclerViewAdapter
         }
 
         void bind(Lomba data){
+            if(data == null){
+                Log.w("Presenter", "Data is null");
+                return;
+            }
             titleTextView.setText(data.getNamaLomba());
-            jadwalTextView.setText("Description");
+            jadwalTextView.setText(data.toString());
         }
     }
 

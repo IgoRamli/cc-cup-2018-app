@@ -33,18 +33,18 @@ public class JadwalPresenter implements JadwalContract.Presenter{
                     mModel.getLoader());
             return new String[]{};
         }else {
-            Log.v(getClass().getName(), "Data already exist");
+            Log.v("Bug", "Data already exist");
             bidangLoaded = 1;
             return mModel.getWriter().getListBidangString();
         }
     }
 
     @Override
-    public void changeJadwalType(int i){/*
+    public void changeJadwalType(int i){
         mInternet = new FetchDataTask(this);
-        mInternet.execute(NetworkUtil.makeWebQuery(i));*/
+        mInternet.execute(NetworkUtil.makeWebQuery(i));
         //Asumsikan Belum ada data, jalankan loader
-        loadAllData();
+        //loadAllData();
         //Sudah ada data, ambil dari SQL
 
     }

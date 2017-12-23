@@ -3,6 +3,8 @@ package org.osiskanisius.cccup.cccup2018.data;
 import android.os.Parcel;
 import android.os.Parcelable;
 
+import org.osiskanisius.cccup.cccup2018.model.JadwalSQLContract;
+
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -14,7 +16,7 @@ import java.util.Locale;
  */
 
 public class Lomba implements Parcelable{
-    private String namaLomba = null;
+    private String namaLomba = "TBA";
     private Date waktuMulai = null;
     private ArrayList<LombaDetails> peserta = new ArrayList<>();
     private static final SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd-HH:mm:ss", Locale.US);
@@ -53,10 +55,10 @@ public class Lomba implements Parcelable{
     };
 
     public String getNamaLomba(){
-        if(namaLomba == null){
+        if(this.namaLomba == null || this.namaLomba.equals("")){
             return "TBA";
         }else{
-            return namaLomba;
+            return this.namaLomba;
         }
     }
 
@@ -94,5 +96,15 @@ public class Lomba implements Parcelable{
         parcel.writeString(this.namaLomba);
         parcel.writeString(this.waktuMulai.toString());
         parcel.writeList(this.peserta);
+    }
+
+    @Override
+    public String toString(){
+        StringBuilder builder = new StringBuilder();
+        builder.append(waktuMulai.toString()+"\n");
+        for(LombaDetails row : peserta){
+            builder.append(row.toString());
+        }
+        return builder.toString();
     }
 }

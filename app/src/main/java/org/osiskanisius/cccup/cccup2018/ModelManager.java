@@ -1,6 +1,7 @@
 package org.osiskanisius.cccup.cccup2018;
 
 import android.content.Context;
+import android.util.Log;
 
 import org.osiskanisius.cccup.cccup2018.internet.DataPacket;
 import org.osiskanisius.cccup.cccup2018.internet.WebLoader;
@@ -61,6 +62,7 @@ public class ModelManager {
     }
 
     public boolean isDataAvailable(String tableName){
+        Log.v("Bug", "Data is avaliable : "+(mWriter.getTableCount(tableName) > 0));
         return mWriter.getTableCount(tableName) > 0;
     }
 

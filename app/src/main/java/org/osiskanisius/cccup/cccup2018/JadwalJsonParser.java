@@ -46,7 +46,7 @@ public class JadwalJsonParser {
         for(int idx = 0; keys.hasNext();){
             String key = keys.next();
             if(key.equals(CHECKER)) continue;
-            Lomba result = new Lomba(null, null);
+            Lomba result = new Lomba();
             JSONObject dataLomba = daftarLomba.getJSONObject(key);
             result.setNamaLomba(dataLomba.getString(NAMA_LOMBA));
             String waktu = dataLomba.getString(TANGGAL_LOMBA)+"-"+dataLomba.getString(WAKTU_LOMBA);
@@ -62,6 +62,7 @@ public class JadwalJsonParser {
                 result.addPeserta(res);
             }
             hasilAkhir[idx] = result;
+            idx++;//Fuck you...
         }
         return hasilAkhir;
     }

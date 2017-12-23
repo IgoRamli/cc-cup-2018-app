@@ -87,4 +87,13 @@ public class LombaDetails implements Parcelable{
         parcel.writeString(this.namaSekolah);
         parcel.writeInt(this.skorPeserta);
     }
+
+    @Override
+    public String toString(){
+        StringBuilder builder = new StringBuilder()
+                .append("\t"+namaPeserta)
+                .append("\t"+namaSekolah)
+                .append("\t"+skorPeserta);
+        return builder.toString();
+    }
 }
