@@ -14,10 +14,10 @@ import java.util.Date;
 import java.util.Locale;
 
 /**
- * Kelas yang menyimpan data lomba (Nama Lomba, eaktu mulai lomba, dan daftar peserta yang berpartisipasi
- * Untuk lomba dengan sistem kualifikasi, satu performance dari satu tim dianggap satu lomba
- * Jadi, daftar peserta hanya akan berisi maksimal 2 peserta (Untuk sistem duel seperti sepak bola, pencak silat, catur, dll.)
- * Untuk lomba kualifikasi(Modern Dance, Band, Short Movie), hanya ada satu peserta tiap lomba
+ * Kelas yang menyimpan data lomba (Nama Lomba, eaktu mulai lomba, dan daftar peserta yang berpartisipasi)<br>
+ * Untuk lomba dengan sistem kualifikasi, satu performance dari satu tim dianggap satu lomba<br>
+ * Jadi, daftar peserta hanya akan berisi maksimal 2 peserta (Untuk sistem duel seperti sepak bola, pencak silat, catur, dll.)<br>
+ * Untuk lomba kualifikasi (Modern Dance, Band, Short Movie), hanya ada satu peserta tiap lomba<br>
  * Created by inigo on 22/12/17.
  */
 

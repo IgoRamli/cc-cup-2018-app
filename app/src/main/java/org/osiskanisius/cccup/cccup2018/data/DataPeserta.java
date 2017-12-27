@@ -5,8 +5,8 @@ import android.database.Cursor;
 import org.osiskanisius.cccup.cccup2018.model.database.DatabaseContract;
 
 /**
- * Kelas untuk menympan data peserta (Nama peserta, Nama Sekolah, dan Info Spesial
- * Kelas ini sudah diberi pengaman sehingga tidak akan memberikan nilai null saat mengambil data
+ * Kelas untuk menympan data peserta (Nama peserta, Nama Sekolah, dan Info Spesial<br>
+ * Kelas ini sudah diberi pengaman sehingga tidak akan memberikan nilai null saat mengambil data<br>
  * Created by inigo on 27/12/17.
  */
 
@@ -68,8 +68,8 @@ public class DataPeserta {
 
     /**
      * Memberikan nama sekolah
-     * @return nama sekolah asal peserta
-     *         "Unknown" apabila nama sekolah asal peserta tidak diketahui
+     * @return nama sekolah asal peserta<br>
+     *         "Unknown" apabila nama sekolah asal peserta tidak diketahui<br>
      *         "TBA" apabila tidak ada data peserta yang tersimpan di sini
      */
     public String getNamaSekolah() {
@@ -131,7 +131,7 @@ public class DataPeserta {
     }
 
     /**
-     * Memberitahukan apakah ada data yang tersimpan dalam variabe ini
+     * Memberitahukan apakah ada data yang tersimpan dalam variabel ini
      * @return true apabila ada data, false bila tidak
      */
     public Boolean isDataExists(){

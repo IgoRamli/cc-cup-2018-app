@@ -7,6 +7,7 @@ import android.os.Parcelable;
 import org.osiskanisius.cccup.cccup2018.model.database.DatabaseContract;
 
 /**
+ * Kelas ini menyimpan data peserta dan skor mereka dalam satu lomba
  * Created by inigo on 22/12/17.
  */
 
