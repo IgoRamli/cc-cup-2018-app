@@ -5,10 +5,7 @@ import org.json.JSONException;
 import org.json.JSONObject;
 import org.osiskanisius.cccup.cccup2018.data.Lomba;
 import org.osiskanisius.cccup.cccup2018.data.LombaDetails;
-import org.osiskanisius.cccup.cccup2018.model.JadwalSQLContract;
 
-import java.lang.reflect.Array;
-import java.lang.reflect.Field;
 import java.text.ParseException;
 import java.util.ArrayList;
 import java.util.HashMap;

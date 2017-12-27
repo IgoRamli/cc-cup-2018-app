@@ -3,13 +3,10 @@ package org.osiskanisius.cccup.cccup2018.data;
 import android.os.Parcel;
 import android.os.Parcelable;
 
-import org.osiskanisius.cccup.cccup2018.model.JadwalSQLContract;
-
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
-import java.util.List;
 import java.util.Locale;
 
 /**

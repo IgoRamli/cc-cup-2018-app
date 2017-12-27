@@ -2,117 +2,62 @@ package org.osiskanisius.cccup.cccup2018.jadwal;
 
 import android.util.Log;
 
-import org.osiskanisius.cccup.cccup2018.ModelManager;
 import org.osiskanisius.cccup.cccup2018.data.Lomba;
-import org.osiskanisius.cccup.cccup2018.internet.DataLoader;
-import org.osiskanisius.cccup.cccup2018.internet.FetchDataTask;
-import org.osiskanisius.cccup.cccup2018.internet.NetworkUtil;
-import org.osiskanisius.cccup.cccup2018.model.JadwalSQLContract;
-import org.osiskanisius.cccup.cccup2018.model.JadwalSQLOpenHelper;
-import org.osiskanisius.cccup.cccup2018.model.JadwalWriter;
+import org.osiskanisius.cccup.cccup2018.model.ModelManager;
 
 public class JadwalPresenter implements JadwalContract.Presenter{
     private JadwalContract.View mView;
-    private ModelManager mModel;
-    private FetchDataTask mInternet;
-
-    private int bidangLoaded = 0;
+    private ModelManager mManager;
+    private int currentBidang = 0;
 
     JadwalPresenter(JadwalContract.View view){
         mView = view;
-        mModel = new ModelManager(view.getViewContext(), this);
-        mInternet = new FetchDataTask(this);
-        bidangLoaded = 0;
+        mManager = new ModelManager(this, view.getViewContext());
     }
 
     @Override
     public String[] getListBidang(){
-        if(!mModel.isDataAvailable(JadwalSQLContract.Bidang.TABLE_NAME)){
-            mView.loadData(JadwalSQLContract.Bidang.TABLE_NAME,
-                    true,
-                    mModel.getLoader());
-            return new String[]{};
-        }else {
-            Log.v("Bug", "Data already exist");
-            bidangLoaded = 1;
-            return mModel.getWriter().getListBidangString();
+        if(!mManager.isDatabaseLoaded()){
+            mManager.setNotifyPresenter(true);
+            showLoadingState();
+            mManager.loadDatabase();
+            return new String[0];
+        }else{
+            return mManager.getListBidangFromDB();
         }
     }
 
     @Override
     public void changeJadwalType(int i){
-        mInternet = new FetchDataTask(this);
-        mInternet.execute(NetworkUtil.makeWebQuery(i));
-        //Asumsikan Belum ada data, jalankan loader
-        //loadAllData();
-        //Sudah ada data, ambil dari SQL
-
+        currentBidang = i;
+        Log.d("JadwalPresenter", "changeJadwalType("+i+")");
+        if(!mManager.isDatabaseLoaded()){
+            mManager.setNotifyPresenter(true);
+            showLoadingState();
+            Log.d("JadwalPresenter", "showLoadingState");
+            mManager.loadDatabase();
+        }else{
+            displayJadwal();
+        }
     }
 
-    @Override
-    public void onPreExecute(){
-        mView.showProgressBar();
-    }
-
-    @Override
-    public void onPostExecute(Lomba[] hasilAkhir){
-        mView.hideProgressBar();
-        if(hasilAkhir == null){
-            showErrorState();
-        }else if(hasilAkhir.length == 0){
+    public void displayJadwal(){
+        if(mManager.isDatabaseLoaded()) {
+            //TODO: Take and Display data here
             showEmptyState();
         }else{
-            showJadwalData();
-            mView.setJadwalLomba(hasilAkhir);
+            showErrorState();
         }
-    }
-
-    @Override
-    public void notifySQLChange(String tableName){
-        if(tableName.equals(JadwalSQLContract.Bidang.TABLE_NAME)){
-            //Update spinner
-            if(!mModel.isDataAvailable(JadwalSQLContract.Bidang.TABLE_NAME)){
-                //It no data still exist, error
-                bidangLoaded = -1;
-                mView.setSpinnerAdapter(new String[]{"Data not available"});
-            }else {
-                bidangLoaded = 1;
-                mView.setSpinnerAdapter(getListBidang());
-                changeJadwalType(1);
-            }
-        }else{
-            //Default, do nothing
-        }
-    }
-
-    @Override
-    public int isBidangLoaded(){
-        return bidangLoaded;
     }
 
     @Override
     public void onItemSelected(int i){
-        if(bidangLoaded == 1){
-            showJadwalData();
-            changeJadwalType(i+1);
-            Log.v(getClass().getName(), "changeJadwalType = "+(i+1));
-        }else if(bidangLoaded == 0) {
-            showLoadingState();
-        }else{
-            showErrorState();
-        }
+        changeJadwalType(i);
     }
 
     @Override
     public void onNothingSelected(){
-        if(bidangLoaded == 1){
-            showJadwalData();
-            changeJadwalType(1);
-        }else if(bidangLoaded == 0) {
-            showLoadingState();
-        }else{
-            showErrorState();
-        }
+        changeJadwalType(1);
     }
 
     @Override
@@ -147,20 +92,7 @@ public class JadwalPresenter implements JadwalContract.Presenter{
         mView.showProgressBar();
     }
 
-    public void loadAllData(){
-        String[] daftarTabel = {
-                JadwalSQLContract.Bidang.TABLE_NAME,
-                JadwalSQLContract.Sekolah.TABLE_NAME,
-                JadwalSQLContract.Peserta.TABLE_NAME,
-                JadwalSQLContract.Lokasi.TABLE_NAME,
-                JadwalSQLContract.Lomba.TABLE_NAME,
-                JadwalSQLContract.LombaDetails.TABLE_NAME,
-                JadwalSQLContract.PoolDetails.TABLE_NAME,
-                JadwalSQLContract.PencaksilatDetails.TABLE_NAME,
-                JadwalSQLContract.TaekwondoDetails.TABLE_NAME
-        };
-        for(String tabel : daftarTabel){
-            mView.loadData(tabel, true, mModel.getLoader());
-        }
+    public void updateSpinner(){
+        mView.setSpinnerAdapter(mManager.getListBidangFromDB());
     }
 }

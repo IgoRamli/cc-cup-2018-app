@@ -1,4 +1,4 @@
-package org.osiskanisius.cccup.cccup2018.model;
+package org.osiskanisius.cccup.cccup2018.model.database;
 
 import android.provider.BaseColumns;
 
@@ -6,9 +6,21 @@ import android.provider.BaseColumns;
  * Created by inigo on 13/12/17.
  */
 
-public final class JadwalSQLContract {
+final class DatabaseContract {
     //Empty PRIVATE constructor, agar tak ada idiot yang membuat objek baru dgn kelas ini
-    private JadwalSQLContract(){}
+    private DatabaseContract(){}
+
+    public static final String[] tables = {
+            Bidang.TABLE_NAME,
+            Sekolah.TABLE_NAME,
+            Lokasi.TABLE_NAME,
+            Peserta.TABLE_NAME,
+            Lomba.TABLE_NAME,
+            LombaDetails.TABLE_NAME,
+            PoolDetails.TABLE_NAME,
+            PencaksilatDetails.TABLE_NAME,
+            TaekwondoDetails.TABLE_NAME
+    };
 
     public static class Bidang implements BaseColumns{
         public static final String TABLE_NAME = "bidang";

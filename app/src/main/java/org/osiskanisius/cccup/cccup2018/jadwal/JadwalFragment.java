@@ -2,35 +2,22 @@ package org.osiskanisius.cccup.cccup2018.jadwal;
 
 import android.support.v4.app.LoaderManager;
 import android.content.Context;
-import android.content.Loader;
-import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.LinearLayout;
-import android.widget.ProgressBar;
 import android.widget.Spinner;
 import android.widget.TextView;
 
-import org.json.JSONException;
-import org.osiskanisius.cccup.cccup2018.JadwalJsonParser;
-import org.osiskanisius.cccup.cccup2018.ModelManager;
 import org.osiskanisius.cccup.cccup2018.data.Lomba;
-import org.osiskanisius.cccup.cccup2018.internet.DataPacket;
-import org.osiskanisius.cccup.cccup2018.internet.NetworkUtil;
 import org.osiskanisius.cccup.cccup2018.R;
 import org.osiskanisius.cccup.cccup2018.adapter.JadwalRecyclerViewAdapter;
-import org.osiskanisius.cccup.cccup2018.internet.WebLoader;
-
-import java.io.IOException;
-import java.net.URL;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -94,7 +81,6 @@ public class JadwalFragment extends Fragment
 
         //Set adapter untuk Spinner
         setSpinnerAdapter(mPresenter.getListBidang());
-        mPresenter.showLoadingState();
 
         //Set adapter untuk RecyclerView
         LinearLayoutManager layoutManager = new LinearLayoutManager(getActivity(),
@@ -215,15 +201,5 @@ public class JadwalFragment extends Fragment
     @Override
     public void onNothingSelected(AdapterView<?> adapterView) {
         mPresenter.onNothingSelected();
-    }
-
-    @Override
-    public void loadData(String tableName,
-                         Boolean forceLoad,
-                         LoaderManager.LoaderCallbacks callback){
-        Bundle args = new Bundle();
-        args.putString(WebLoader.TABLE_NAME_KEY, tableName);
-        args.putBoolean(WebLoader.FORCE_LOAD, forceLoad);
-        getLoaderManager().initLoader(WebLoader.LOADER_ID, args, callback);
     }
 }
