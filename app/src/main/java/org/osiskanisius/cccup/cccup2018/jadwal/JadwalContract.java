@@ -2,7 +2,7 @@ package org.osiskanisius.cccup.cccup2018.jadwal;
 
 import android.content.Context;
 
-import org.osiskanisius.cccup.cccup2018.data.Lomba;
+import org.osiskanisius.cccup.cccup2018.data.DataLomba;
 
 /**
  * Created by inigo on 18/12/17.
@@ -20,7 +20,7 @@ public interface JadwalContract {
         void hideEmptyState();
         void showJadwalLomba();
         void hideJadwalLomba();
-        void setJadwalLomba(Lomba[] jadwalLomba);
+        void setJadwalLomba(DataLomba[] jadwalLomba);
     }
     interface Presenter{
         String[] getListBidang();

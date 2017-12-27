@@ -2,7 +2,6 @@ package org.osiskanisius.cccup.cccup2018.jadwal;
 
 import android.util.Log;
 
-import org.osiskanisius.cccup.cccup2018.data.Lomba;
 import org.osiskanisius.cccup.cccup2018.model.ModelManager;
 
 public class JadwalPresenter implements JadwalContract.Presenter{

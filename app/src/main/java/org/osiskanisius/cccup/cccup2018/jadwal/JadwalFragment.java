@@ -1,6 +1,5 @@
 package org.osiskanisius.cccup.cccup2018.jadwal;
 
-import android.support.v4.app.LoaderManager;
 import android.content.Context;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
@@ -15,7 +14,7 @@ import android.widget.LinearLayout;
 import android.widget.Spinner;
 import android.widget.TextView;
 
-import org.osiskanisius.cccup.cccup2018.data.Lomba;
+import org.osiskanisius.cccup.cccup2018.data.DataLomba;
 import org.osiskanisius.cccup.cccup2018.R;
 import org.osiskanisius.cccup.cccup2018.adapter.JadwalRecyclerViewAdapter;
 
@@ -188,7 +187,7 @@ public class JadwalFragment extends Fragment
         listData.setVisibility(RecyclerView.INVISIBLE);
     }
     @Override
-    public void setJadwalLomba(Lomba[] hasilAkhir){
+    public void setJadwalLomba(DataLomba[] hasilAkhir){
         adapter.setJadwalData(hasilAkhir);
     }
 

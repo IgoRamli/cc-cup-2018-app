@@ -7,14 +7,14 @@ import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.widget.TextView;
 
-import org.osiskanisius.cccup.cccup2018.data.Lomba;
+import org.osiskanisius.cccup.cccup2018.data.DataLomba;
 
 public class DetailActivity extends AppCompatActivity {
     private Toolbar mToolbar;
     private TextView mDescription;
-    private String textTitle = "Unknown Lomba";
+    private String textTitle = "Unknown DataLomba";
     private String textDesc = "Unknown Detail";
-    private Lomba data;
+    private DataLomba data;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {

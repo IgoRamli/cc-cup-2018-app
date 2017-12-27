@@ -3,8 +3,8 @@ package org.osiskanisius.cccup.cccup2018;
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
-import org.osiskanisius.cccup.cccup2018.data.Lomba;
-import org.osiskanisius.cccup.cccup2018.data.LombaDetails;
+import org.osiskanisius.cccup.cccup2018.data.DataLomba;
+import org.osiskanisius.cccup.cccup2018.data.DataLombaDetails;
 
 import java.text.ParseException;
 import java.util.ArrayList;
@@ -33,17 +33,17 @@ public class JadwalJsonParser {
      * @return array of String. Setiap elemen dalam array berisi data satu lomba
      * @throws JSONException apabila terjadi kesalahan dalam mengambil JSON
      */
-    public static Lomba[] parseSimpleJadwal(String json) throws JSONException, ParseException {
+    public static DataLomba[] parseSimpleJadwal(String json) throws JSONException, ParseException {
         JSONObject daftarLomba = new JSONObject(json);
         Iterator<String> keys = daftarLomba.keys();
         int jumlahLomba = daftarLomba.length()-1;
         if(jumlahLomba < 0) return null;
 
-        Lomba[] hasilAkhir = new Lomba[jumlahLomba];
+        DataLomba[] hasilAkhir = new DataLomba[jumlahLomba];
         for(int idx = 0; keys.hasNext();){
             String key = keys.next();
             if(key.equals(CHECKER)) continue;
-            Lomba result = new Lomba();
+            DataLomba result = new DataLomba();
             JSONObject dataLomba = daftarLomba.getJSONObject(key);
             result.setNamaLomba(dataLomba.getString(NAMA_LOMBA));
             String waktu = dataLomba.getString(TANGGAL_LOMBA)+" "+dataLomba.getString(WAKTU_LOMBA);
@@ -53,7 +53,7 @@ public class JadwalJsonParser {
             int jumlahPeserta = daftarPeserta.length();
             for(int i = 0; i < jumlahPeserta; i++){
                 JSONObject dataPeserta = daftarPeserta.getJSONObject(i);
-                LombaDetails res = new LombaDetails(dataPeserta.getString(NAMA_PESERTA),
+                DataLombaDetails res = new DataLombaDetails(dataPeserta.getString(NAMA_PESERTA),
                                                     dataPeserta.getString(NAMA_SEKOLAH),
                                                     dataPeserta.getInt(SKOR_PESERTA));
                 result.addPeserta(res);
