@@ -43,6 +43,7 @@ public class JadwalPresenter implements JadwalContract.Presenter{
     public void displayJadwal(){
         if(mManager.isDatabaseLoaded()) {
             //TODO: Take and Display data here
+
             showEmptyState();
         }else{
             showErrorState();

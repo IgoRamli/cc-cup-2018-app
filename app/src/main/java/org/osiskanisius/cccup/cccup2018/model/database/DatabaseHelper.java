@@ -5,7 +5,10 @@ import android.content.Context;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
+import android.util.SparseArray;
 
+import org.osiskanisius.cccup.cccup2018.data.DataLomba;
+import org.osiskanisius.cccup.cccup2018.data.DataLombaDetails;
 import org.osiskanisius.cccup.cccup2018.model.ModelManager;
 import org.osiskanisius.cccup.cccup2018.model.internet.DataPacket;
 import org.osiskanisius.cccup.cccup2018.model.internet.DatabaseLoader;
@@ -153,7 +156,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
 
     /**
      * Memasukkan data yang telah diambil dari wek ke tabel, sekaligus memberitahukan Presenter
-     * bahwa data telah berhasil dimasukkan (Bila notifyPresenter menyala)
+     * bahwa data telah berhasil dimasukkan (Bila notifyPresenter menyala)<br>
      * Selain itu, mengupdate Preference apabila data telah berhasil/gagal diupdate
      * @param hasil Array berisi data yang telah diambil
      */
@@ -187,5 +190,59 @@ public class DatabaseHelper extends SQLiteOpenHelper {
             ));
         }
         return list.toArray(new String[0]);
+    }
+
+    /**
+     * Memberikan data semua lomba pada bidang tertentu
+     * @param bidangID ID dari bidang yang lombanya ingin dicari
+     * @return Array yang berisi semua data lomba yang dicari
+     */
+    public DataLomba[] getListLomba(Integer bidangID){
+        String tLomba, tLombaDetails, tPeserta, tLokasi;
+        tLomba = DatabaseContract.Lomba.TABLE_NAME;
+        tLombaDetails = DatabaseContract.LombaDetails.TABLE_NAME;
+        tPeserta = DatabaseContract.Peserta.TABLE_NAME;
+        tLokasi = DatabaseContract.Lokasi.TABLE_NAME;
+        Cursor result = getReadableDatabase().rawQuery(
+                "SELECT * FROM " +
+                        leftJoin(
+                                leftJoin(
+                                        leftJoin(
+                                                tLombaDetails,
+                                                tLomba,
+                                                DatabaseContract.Lomba._ID + "=" +
+                                                        DatabaseContract.LombaDetails.COLUMN_LOMBA_ID),
+                                        tPeserta,
+                                        DatabaseContract.Peserta._ID + "=" +
+                                                DatabaseContract.LombaDetails.COLUMN_PESERTA_ID),
+                                tLokasi,
+                                DatabaseContract.Lokasi._ID + "=" +
+                                        DatabaseContract.Lomba.COLUMN_LOKASI_ID
+                        ) +
+                        " WHERE " + DatabaseContract.Lomba.COLUMN_BIDANG_ID + " = " +
+                        bidangID,
+                new String[0]
+        );
+
+        SparseArray<DataLomba> hasil = new SparseArray<>();
+        while(result.moveToNext()){
+            DataLombaDetails row = new DataLombaDetails(result);
+            Integer id = result.getInt(result.getColumnIndex(DatabaseContract.Lomba._ID));
+            if(hasil.get(id) == null){
+                DataLomba rowLomba = new DataLomba(result);
+                hasil.append(id, rowLomba);
+            }
+            hasil.get(id).addPeserta(row);
+        }
+
+        DataLomba[] hasilAkhir = new DataLomba[hasil.size()];
+        for(int i = 0; i < hasilAkhir.length; i++){
+            hasilAkhir[i] = hasil.valueAt(i);
+        }
+        return hasilAkhir;
+    }
+
+    private String leftJoin(String left, String right, String condition){
+        return "("+left+") LEFT JOIN ("+right+") ON ("+condition+")";
     }
 }

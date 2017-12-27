@@ -2,8 +2,10 @@ package org.osiskanisius.cccup.cccup2018.model;
 
 import android.content.Context;
 import android.content.SharedPreferences;
+import android.database.sqlite.SQLiteDatabase;
 import android.util.Log;
 
+import org.osiskanisius.cccup.cccup2018.data.DataLomba;
 import org.osiskanisius.cccup.cccup2018.jadwal.JadwalPresenter;
 import org.osiskanisius.cccup.cccup2018.model.database.DatabaseHelper;
 import org.osiskanisius.cccup.cccup2018.model.preferences.PreferenceManager;
@@ -55,5 +57,9 @@ public class ModelManager {
 
     public String[] getListBidangFromDB(){
         return mDatabase.getListLombaFromDB();
+    }
+
+    public DataLomba[] getListLomba(Integer bidangID){
+        return mDatabase.getListLomba(bidangID);
     }
 }
