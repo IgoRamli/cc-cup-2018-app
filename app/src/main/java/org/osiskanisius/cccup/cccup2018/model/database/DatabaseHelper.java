@@ -124,6 +124,10 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         onCreate(db);
     }
 
+    /**
+     * Memasukkan data ke dalam tabel
+     * @param data Data yang ingin dimasukkan
+     */
     public void insertToTable(DataPacket data){
         for(HashMap<String, String> row : data.getData()){
             ContentValues content = new ContentValues();
@@ -137,12 +141,22 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         }
     }
 
+    /**
+     * Mengambil data dari web cccup.osiskanisius.org untuk dimasukkan ke dalam tabel
+     * Dengan fungsi ini, semua tabel diupdate
+     */
     public void populateData(){
         Boolean allUpToDate = true;
         DatabaseLoader loader = new DatabaseLoader(this);
         loader.execute(DatabaseContract.tables);
     }
 
+    /**
+     * Memasukkan data yang telah diambil dari wek ke tabel, sekaligus memberitahukan Presenter
+     * bahwa data telah berhasil dimasukkan (Bila notifyPresenter menyala)
+     * Selain itu, mengupdate Preference apabila data telah berhasil/gagal diupdate
+     * @param hasil Array berisi data yang telah diambil
+     */
     public void onLoadingComplete(DataPacket[] hasil){
         Boolean loadingResult = true;
         for(DataPacket tabel : hasil){
@@ -153,6 +167,10 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         mManager.notifyPresenter();
     }
 
+    /**
+     * Mendapatkan daftar bidang dari SQLite Database
+     * @return String array yang berisi daftar semua bidang
+     */
     public String[] getListLombaFromDB(){
         SQLiteDatabase db = getReadableDatabase();
         Cursor result = db.query(DatabaseContract.Bidang.TABLE_NAME,
