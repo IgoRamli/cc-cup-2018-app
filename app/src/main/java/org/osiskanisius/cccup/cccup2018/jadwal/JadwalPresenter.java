@@ -2,16 +2,16 @@ package org.osiskanisius.cccup.cccup2018.jadwal;
 
 import android.util.Log;
 
-import org.osiskanisius.cccup.cccup2018.model.ModelManager;
+import org.osiskanisius.cccup.cccup2018.data.DataLomba;
 
 public class JadwalPresenter implements JadwalContract.Presenter{
     private JadwalContract.View mView;
-    private ModelManager mManager;
+    private JadwalModel mManager;
     private int currentBidang = 0;
 
     JadwalPresenter(JadwalContract.View view){
         mView = view;
-        mManager = new ModelManager(this, view.getViewContext());
+        mManager = new JadwalModel(this, view.getViewContext());
     }
 
     @Override
@@ -22,18 +22,18 @@ public class JadwalPresenter implements JadwalContract.Presenter{
             mManager.loadDatabase();
             return new String[0];
         }else{
+            Log.d("JadwalPresenter", "Jummlah Bidang = " + mManager.getListBidangFromDB().length);
             return mManager.getListBidangFromDB();
         }
     }
 
     @Override
     public void changeJadwalType(int i){
-        currentBidang = i;
+        currentBidang = i+1;
+        showLoadingState();
         Log.d("JadwalPresenter", "changeJadwalType("+i+")");
         if(!mManager.isDatabaseLoaded()){
             mManager.setNotifyPresenter(true);
-            showLoadingState();
-            Log.d("JadwalPresenter", "showLoadingState");
             mManager.loadDatabase();
         }else{
             displayJadwal();
@@ -42,9 +42,13 @@ public class JadwalPresenter implements JadwalContract.Presenter{
 
     public void displayJadwal(){
         if(mManager.isDatabaseLoaded()) {
-            //TODO: Take and Display data here
-
-            showEmptyState();
+            DataLomba[] listLomba = mManager.getListLomba(currentBidang);
+            if(listLomba.length > 0){
+                showJadwalData();
+                mView.setJadwalLomba(listLomba);
+            }else {
+                showEmptyState();
+            }
         }else{
             showErrorState();
         }
@@ -57,7 +61,7 @@ public class JadwalPresenter implements JadwalContract.Presenter{
 
     @Override
     public void onNothingSelected(){
-        changeJadwalType(1);
+        changeJadwalType(0);
     }
 
     @Override

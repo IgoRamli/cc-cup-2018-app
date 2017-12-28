@@ -15,7 +15,7 @@ public class WebQuery {
 
     public static URL makeTableQuery(String tableName){
         Uri uri = Uri.parse(GET_LIST_URL).buildUpon()
-                .appendQueryParameter("table", tableName)
+                .appendQueryParameter("tabel", tableName)
                 .build();
         try{
             return new URL(uri.toString());

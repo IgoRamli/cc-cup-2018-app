@@ -1,4 +1,4 @@
-package org.osiskanisius.cccup.cccup2018.model;
+package org.osiskanisius.cccup.cccup2018.jadwal;
 
 import android.content.Context;
 import android.content.SharedPreferences;
@@ -7,6 +7,7 @@ import android.util.Log;
 
 import org.osiskanisius.cccup.cccup2018.data.DataLomba;
 import org.osiskanisius.cccup.cccup2018.jadwal.JadwalPresenter;
+import org.osiskanisius.cccup.cccup2018.model.ModelContract;
 import org.osiskanisius.cccup.cccup2018.model.database.DatabaseHelper;
 import org.osiskanisius.cccup.cccup2018.model.preferences.PreferenceManager;
 
@@ -17,7 +18,7 @@ import org.osiskanisius.cccup.cccup2018.model.preferences.PreferenceManager;
  * Created by inigo on 26/12/17.
  */
 
-public class ModelManager {
+class JadwalModel implements ModelContract{
     private DatabaseHelper mDatabase;
     private PreferenceManager mPref;
     private JadwalPresenter mPresenter;
@@ -25,7 +26,7 @@ public class ModelManager {
     //Notify flag
     private Boolean notifyPresenter = false;
 
-    public ModelManager(JadwalPresenter presenter, Context context){
+    public JadwalModel(JadwalPresenter presenter, Context context){
         mPresenter = presenter;
         mPref = new PreferenceManager(context);
         mDatabase = new DatabaseHelper(this, context);
@@ -33,7 +34,7 @@ public class ModelManager {
 
     public void setDBLoadedKey(Boolean value){
         mPref.writeData(PreferenceManager.DB_LOADED_KEY, value);
-        Log.d("ModelManager", "DB Loaded = "+value);
+        Log.d("JadwalModel", "DB Loaded = "+value);
     }
 
     public Boolean isDatabaseLoaded(){

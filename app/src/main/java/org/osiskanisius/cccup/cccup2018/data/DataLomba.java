@@ -22,8 +22,10 @@ import java.util.Locale;
  */
 
 public class DataLomba {
+    private Integer lombaID;
     private String namaLomba = null;
     private Date waktuMulai = null;
+    private String lokasi = null;
     private ArrayList<DataLombaDetails> peserta = new ArrayList<>();
     private static final SimpleDateFormat tableFormat =
             new SimpleDateFormat("yyyy-MM-dd HH:mm:ss", Locale.US);
@@ -39,24 +41,42 @@ public class DataLomba {
      * @param cursor Cursur yang berisi data lomba
      */
     public DataLomba(Cursor cursor){
-        if(cursor.getColumnIndex(DatabaseContract.Lomba.COLUMN_NAMA) != -1){
-            this.namaLomba = cursor.getString(cursor.getColumnIndex(DatabaseContract.Lomba.COLUMN_NAMA));
-        }
+        String colLomba = DatabaseContract.Lomba.COLUMN_NAMA;
 
-        try {
-            String date = null, time = null;
-            if (cursor.getColumnIndex(DatabaseContract.Lomba.COLUMN_DATE) != -1) {
-                date = cursor.getString(cursor.getColumnIndex(DatabaseContract.Lomba.COLUMN_DATE));
-            }
-            if (cursor.getColumnIndex(DatabaseContract.Lomba.COLUMN_WAKTU) != -1) {
-                time = cursor.getString(cursor.getColumnIndex(DatabaseContract.Lomba.COLUMN_WAKTU));
-            }
-            if (date != null && time != null) {
-                this.waktuMulai = tableFormat.parse(date + " " + time);
-            }
-        }catch(ParseException e){
-            Log.w("DataLomba", "Tanggal/waktu mulai lomba di Cursor tidak valid!");
+        if(cursor.getColumnIndex(DatabaseContract.Lomba._ID) != -1){
+            this.lombaID = cursor.getInt(cursor.getColumnIndex(DatabaseContract.Lomba._ID));
         }
+        if(lombaID != null) {
+            if (cursor.getColumnIndex(colLomba) != -1) {
+                this.namaLomba = cursor.getString(cursor.getColumnIndex(colLomba));
+            }
+            if (cursor.getColumnIndex(DatabaseContract.Lokasi.COLUMN_NAMA) != -1) {
+                this.lokasi = cursor.getString(cursor.getColumnIndex(DatabaseContract.Lokasi.COLUMN_NAMA));
+            }
+
+            try {
+                String date = null, time = null;
+                if (cursor.getColumnIndex(DatabaseContract.Lomba.COLUMN_DATE) != -1) {
+                    date = cursor.getString(cursor.getColumnIndex(DatabaseContract.Lomba.COLUMN_DATE));
+                }
+                if (cursor.getColumnIndex(DatabaseContract.Lomba.COLUMN_WAKTU) != -1) {
+                    time = cursor.getString(cursor.getColumnIndex(DatabaseContract.Lomba.COLUMN_WAKTU));
+                }
+                if (date != null && time != null) {
+                    this.waktuMulai = tableFormat.parse(date + " " + time);
+                }
+            } catch (ParseException e) {
+                Log.w("DataLomba", "Tanggal/waktu mulai lomba di Cursor tidak valid!");
+            }
+        }
+    }
+
+    /**
+     * Memberikan ID lomba
+     * @return
+     */
+    public Integer getLombaID(){
+        return this.lombaID;
     }
 
     /**
@@ -95,11 +115,23 @@ public class DataLomba {
      * Memberikan waktu mulai lomba dalam format full (eg. 2018-01-21 11:00:00)
      * @return Waktu lomba dalam format penuh seperti di database, atau "TBA" bila waktu belum diketahui
      */
-    public String getWaktuLombaFull(){
+    public String getWaktuMulaiFull(){
         if(waktuMulai == null){
             return "TBA";
         }else{
             return tableFormat.format(waktuMulai);
+        }
+    }
+
+    /**
+     * Memberikan lokasi lomba
+     * @return Lokasi lomba, atau "TBA" bila lokasi belum diketahui
+     */
+    public String getLokasi(){
+        if(lokasi == null){
+            return "TBA";
+        }else{
+            return this.lokasi;
         }
     }
 
@@ -176,5 +208,25 @@ public class DataLomba {
         }catch(ParseException e){
             return false;
         }
+    }
+
+    /**
+     * Mengubah lokasi lomna
+     * @param lokasi Lokasi lomba yang baru
+     */
+    public void setLokasi(String lokasi) {
+        this.lokasi = lokasi;
+    }
+
+    @Override
+    public String toString(){
+        String string = "";
+        string += getWaktuMulai() + "\n";
+        DataLombaDetails[] peserta = getPeserta();
+        for(int i = 0; i < peserta.length; i++){
+            string += "-> " + peserta[i].toString() + "\n";
+        }
+        string += getLokasi();
+        return string;
     }
 }

@@ -5,7 +5,7 @@ import android.content.SharedPreferences;
 
 /**
  * Kelas ini mengatur urusan preferences
- * Hanya boleh diakses ModelManager
+ * Hanya boleh diakses JadwalModel
  *
  * Konten data di SharedPreferences:
  * 1. DB_LOADED_KEY (Boolean) => Apakah populasi data di SQLite sudah dijalankan dengan baik

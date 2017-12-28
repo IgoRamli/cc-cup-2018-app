@@ -11,6 +11,7 @@ import org.osiskanisius.cccup.cccup2018.model.database.DatabaseContract;
  */
 
 public class DataPeserta {
+    private Integer pesertaID;
     private String namaPeserta = null;
     private String namaSekolah = null;
     private String infoSpesial = null;
@@ -18,20 +19,29 @@ public class DataPeserta {
     public DataPeserta(){}
 
     public DataPeserta(Cursor cursor){
-        if(cursor.getColumnIndex(DatabaseContract.Peserta.COLUMN_NAMA) != -1) {
-            namaPeserta = cursor.getString(cursor.getColumnIndex(DatabaseContract.Peserta.COLUMN_NAMA));
+        String colNama, colSekolah, colPool, colPencaksilat, colTaekwondo;
+        colNama = DatabaseContract.Peserta.COLUMN_NAMA;
+        colSekolah = DatabaseContract.Sekolah.COLUMN_NAMA;
+        colPool = DatabaseContract.PoolDetails.COLUMN_POOL;
+        colPencaksilat = DatabaseContract.PencaksilatDetails.COLUMN_KELAS;
+        colTaekwondo = DatabaseContract.TaekwondoDetails.COLUMN_KELAS;
+        if(cursor.getColumnIndex(DatabaseContract.Peserta._ID) != -1){
+            pesertaID = cursor.getInt(cursor.getColumnIndex(DatabaseContract.Peserta._ID));
         }
-        if(cursor.getColumnIndex(DatabaseContract.Peserta.COLUMN_NAMA) != -1) {
-            namaSekolah = cursor.getString(cursor.getColumnIndex(DatabaseContract.Sekolah.COLUMN_NAMA));
+        if(cursor.getColumnIndex(colNama) != -1) {
+            namaPeserta = cursor.getString(cursor.getColumnIndex(colNama));
         }
-        if(cursor.getColumnIndex(DatabaseContract.PoolDetails.COLUMN_POOL) != -1){
-            infoSpesial = cursor.getString(cursor.getColumnIndex(DatabaseContract.PoolDetails.COLUMN_POOL));
+        if(cursor.getColumnIndex(colSekolah) != -1) {
+            namaSekolah = cursor.getString(cursor.getColumnIndex(colSekolah));
         }
-        if(cursor.getColumnIndex(DatabaseContract.PencaksilatDetails.COLUMN_KELAS) != -1){
-            infoSpesial = cursor.getString(cursor.getColumnIndex(DatabaseContract.PencaksilatDetails.COLUMN_KELAS));
+        if(cursor.getColumnIndex(colPool) != -1){
+            infoSpesial = cursor.getString(cursor.getColumnIndex(colPool));
         }
-        if(cursor.getColumnIndex(DatabaseContract.TaekwondoDetails.COLUMN_KELAS) != -1){
-            infoSpesial = cursor.getString(cursor.getColumnIndex(DatabaseContract.TaekwondoDetails.COLUMN_KELAS));
+        if(cursor.getColumnIndex(colPencaksilat) != -1){
+            infoSpesial = cursor.getString(cursor.getColumnIndex(colPencaksilat));
+        }
+        if(cursor.getColumnIndex(colTaekwondo) != -1){
+            infoSpesial = cursor.getString(cursor.getColumnIndex(colTaekwondo));
         }
 
         if(namaPeserta != null){
@@ -55,8 +65,16 @@ public class DataPeserta {
     }
 
     /**
+     * Memberikan ID peserta
+     * @return ID peserta
+     */
+    public Integer getPesertaID(){
+        return pesertaID;
+    }
+
+    /**
      * Memberikan nama peserta
-     * @return nama peserta, atau "TBA" apabila tidak ada data eserta yang tersimpan
+     * @return nama peserta, atau "TBA" apabila tidak ada data peserta yang tersimpan
      */
     public String getNamaPeserta(){
         if(namaPeserta == null){
@@ -100,7 +118,7 @@ public class DataPeserta {
      * @return true apabila data berhasil diubah, false bila tidak
      */
     public Boolean setInfoSpesial(String infoSpesial) {
-        if(namaPeserta != null) {
+        if(isDataExists()) {
             this.infoSpesial = infoSpesial;
             return true;
         }
@@ -123,7 +141,7 @@ public class DataPeserta {
      * @return true apabila data berhasil diubah, false bila tidak
      */
     public Boolean setNamaSekolah(String namaSekolah) {
-        if(namaPeserta != null) {
+        if(isDataExists()) {
             this.namaSekolah = namaSekolah;
             return true;
         }

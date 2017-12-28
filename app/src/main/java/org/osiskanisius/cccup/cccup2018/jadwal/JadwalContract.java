@@ -8,7 +8,7 @@ import org.osiskanisius.cccup.cccup2018.data.DataLomba;
  * Created by inigo on 18/12/17.
  */
 
-public interface JadwalContract {
+interface JadwalContract {
     interface View{
         Context getViewContext();
         void setSpinnerAdapter(String[] listBidang);

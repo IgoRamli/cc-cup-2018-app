@@ -24,62 +24,65 @@ public final class DatabaseContract {
 
     public static class Bidang implements BaseColumns{
         public static final String TABLE_NAME = "bidang";
-        public static final String _ID = TABLE_NAME+"."+"bidangID";
-        public static final String COLUMN_NAMA = TABLE_NAME+"."+"nama";
-        public static final String COLUMN_NAMA_DB = TABLE_NAME+"."+"namaDB";
+        public static final String _ID = "bidangID"+"_"+TABLE_NAME;
+        public static final String COLUMN_NAMA = "nama"+"_"+TABLE_NAME;
+        public static final String COLUMN_NAMA_DB = "namaDB"+"_"+TABLE_NAME;
     }
 
     public static class Sekolah implements BaseColumns{
         public static final String TABLE_NAME = "sekolah";
-        public static final String _ID = TABLE_NAME+"."+"sekolahID";
-        public static final String COLUMN_NAMA = TABLE_NAME+"."+"nama";
+        public static final String _ID = "sekolahID"+"_"+TABLE_NAME;
+        public static final String COLUMN_NAMA = "nama"+"_"+TABLE_NAME;
     }
 
     public static class Peserta implements BaseColumns{
         public static final String TABLE_NAME = "peserta";
-        public static final String _ID = TABLE_NAME+"."+"pesertaID";
-        public static final String COLUMN_BIDANG_ID = TABLE_NAME+"."+"bidangID";
-        public static final String COLUMN_SEKOLAH_ID = TABLE_NAME+"."+"sekolahID";
-        public static final String COLUMN_NAMA = TABLE_NAME+"."+"nama";
+        public static final String _ID = "pesertaID"+"_"+TABLE_NAME;
+        public static final String COLUMN_BIDANG_ID = "bidangID"+"_"+TABLE_NAME;
+        public static final String COLUMN_SEKOLAH_ID = "sekolahID"+"_"+TABLE_NAME;
+        public static final String COLUMN_NAMA = "nama"+"_"+TABLE_NAME;
     }
 
     public static class Lokasi implements BaseColumns{
         public static final String TABLE_NAME = "lokasi";
-        public static final String _ID = TABLE_NAME+"."+"lokasiID";
-        public static final String COLUMN_NAMA = TABLE_NAME+"."+"nama";
+        public static final String _ID = "lokasiID"+"_"+TABLE_NAME;
+        public static final String COLUMN_NAMA = "nama"+"_"+TABLE_NAME;
     }
 
     public static class Lomba implements BaseColumns{
         public static final String TABLE_NAME = "lomba";
-        public static final String _ID = TABLE_NAME+"."+"lombaID";
-        public static final String COLUMN_BIDANG_ID = TABLE_NAME+"."+"bidangID";
-        public static final String COLUMN_LOKASI_ID = TABLE_NAME+"."+"lokasiID";
-        public static final String COLUMN_NAMA = TABLE_NAME+"."+"nama";
-        public static final String COLUMN_DATE = TABLE_NAME+"."+"date";
-        public static final String COLUMN_WAKTU = TABLE_NAME+"."+"waktuMulai";
+        public static final String _ID = "lombaID"+"_"+TABLE_NAME;
+        public static final String COLUMN_BIDANG_ID = "bidangID"+"_"+TABLE_NAME;
+        public static final String COLUMN_LOKASI_ID = "lokasiID"+"_"+TABLE_NAME;
+        public static final String COLUMN_NAMA = "nama"+"_"+TABLE_NAME;
+        public static final String COLUMN_DATE = "date"+"_"+TABLE_NAME;
+        public static final String COLUMN_WAKTU = "waktuMulai"+"_"+TABLE_NAME;
     }
 
     public static class LombaDetails implements BaseColumns{
         public static final String TABLE_NAME = "lombaDetails";
-        public static final String _ID = TABLE_NAME+"."+"lombaDetailsID";
-        public static final String COLUMN_PESERTA_ID = TABLE_NAME+"."+"pesertaID";
-        public static final String COLUMN_LOMBA_ID = TABLE_NAME+"."+"lombaID";
-        public static final String COLUMN_SKOR_PESERTA = TABLE_NAME+"."+"skorPeserta";
+        public static final String _ID = "lombaDetailsID"+"_"+TABLE_NAME;
+        public static final String COLUMN_PESERTA_ID = "pesertaID"+"_"+TABLE_NAME;
+        public static final String COLUMN_LOMBA_ID = "lombaID"+"_"+TABLE_NAME;
+        public static final String COLUMN_SKOR_PESERTA = "skorPeserta"+"_"+TABLE_NAME;
+        public static final String COLUMN_STATUS_PESERTA = "statusPeserta"+"_"+TABLE_NAME;
     }
 
     public static class PoolDetails implements BaseColumns{
         public static final String TABLE_NAME = "poolDetails";
-        public static final String COLUMN_PESERTA_ID = TABLE_NAME+"."+"pesertaID";
-        public static final String COLUMN_POOL = TABLE_NAME+"."+"pool";
+        public static final String _ID = "pesertaID"+"_"+TABLE_NAME;
+        public static final String COLUMN_POOL = "poolID"+"_"+TABLE_NAME;
     }
 
     public static class PencaksilatDetails implements BaseColumns{
         public static final String TABLE_NAME = "pencaksilatDetails";
-        public static final String COLUMN_KELAS = TABLE_NAME+"."+"kelas";
+        public static final String _ID = "pesertaID"+"_"+TABLE_NAME;
+        public static final String COLUMN_KELAS = "kelas"+"_"+TABLE_NAME;
     }
 
     public static class TaekwondoDetails implements BaseColumns{
         public static final String TABLE_NAME = "taekwondoDetails";
-        public static final String COLUMN_KELAS = TABLE_NAME+"."+"kelas";
+        public static final String _ID = "pesertaID"+"_"+TABLE_NAME;
+        public static final String COLUMN_KELAS = "kelas"+"_"+TABLE_NAME;
     }
 }

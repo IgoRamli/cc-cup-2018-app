@@ -8,7 +8,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
-import org.osiskanisius.cccup.cccup2018.DetailActivity;
+import org.osiskanisius.cccup.cccup2018.detail.DetailActivity;
 import org.osiskanisius.cccup.cccup2018.R;
 import org.osiskanisius.cccup.cccup2018.data.DataLomba;
 
@@ -25,8 +25,7 @@ public class JadwalRecyclerViewAdapter
         public void onClick(View view) {
             Intent gotoDetail = new Intent(view.getContext(), DetailActivity.class);
             int position = parent.getChildLayoutPosition(view);
-            gotoDetail.putExtra(Intent.EXTRA_TEXT, jadwalData[position]);
-            Log.d("Presenter", "Sent: "+jadwalData[position].toString());
+            gotoDetail.putExtra("lombaID", jadwalData[position].getLombaID());
             view.getContext().startActivity(gotoDetail);
             //Toast.makeText(view.getContext(), "Item selected", Toast.LENGTH_LONG).show();
         }

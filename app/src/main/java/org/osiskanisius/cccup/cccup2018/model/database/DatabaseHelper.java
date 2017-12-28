@@ -5,11 +5,13 @@ import android.content.Context;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
+import android.util.Log;
 import android.util.SparseArray;
 
 import org.osiskanisius.cccup.cccup2018.data.DataLomba;
 import org.osiskanisius.cccup.cccup2018.data.DataLombaDetails;
-import org.osiskanisius.cccup.cccup2018.model.ModelManager;
+import org.osiskanisius.cccup.cccup2018.data.DataPeserta;
+import org.osiskanisius.cccup.cccup2018.model.ModelContract;
 import org.osiskanisius.cccup.cccup2018.model.internet.DataPacket;
 import org.osiskanisius.cccup.cccup2018.model.internet.DatabaseLoader;
 
@@ -19,9 +21,9 @@ import java.util.HashMap;
 public class DatabaseHelper extends SQLiteOpenHelper {
     private static final String DATABASE_NAME = "cc_cup_2018.db";
     private static final int DATABASE_VERSION = 1;
-    private ModelManager mManager;
+    private ModelContract mManager;
 
-    public DatabaseHelper(ModelManager manager, Context context){
+    public DatabaseHelper(ModelContract manager, Context context){
         super(context, DATABASE_NAME, null, DATABASE_VERSION);
         mManager = manager;
         if(!mManager.isDatabaseLoaded()){
@@ -76,9 +78,11 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         + ");");
 
         db.execSQL("CREATE TABLE " + DatabaseContract.LombaDetails.TABLE_NAME + "("
+        + DatabaseContract.LombaDetails._ID + " INTEGER NOT NULL, "
         + DatabaseContract.LombaDetails.COLUMN_LOMBA_ID + " INTEGER NOT NULL, "
         + DatabaseContract.LombaDetails.COLUMN_PESERTA_ID + " INTEGER NOT NULL, "
         + DatabaseContract.LombaDetails.COLUMN_SKOR_PESERTA + " INTEGER, "
+        + DatabaseContract.LombaDetails.COLUMN_STATUS_PESERTA + " TEXT, "
         + "FOREIGN KEY (" + DatabaseContract.LombaDetails.COLUMN_LOMBA_ID
         + ") REFERENCES " + DatabaseContract.Lomba.TABLE_NAME
         + "(" + DatabaseContract.Lomba._ID + "), "
@@ -88,9 +92,9 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         + ");");
 
         db.execSQL("CREATE TABLE " + DatabaseContract.PoolDetails.TABLE_NAME + "("
-        + DatabaseContract.PoolDetails.COLUMN_PESERTA_ID + " INTEGER  PRIMARY KEY NOT NULL, "
+        + DatabaseContract.PoolDetails._ID + " INTEGER  PRIMARY KEY NOT NULL, "
         + DatabaseContract.PoolDetails.COLUMN_POOL + " TEXT NOT NULL, "
-        + "FOREIGN KEY (" + DatabaseContract.PoolDetails.COLUMN_PESERTA_ID
+        + "FOREIGN KEY (" + DatabaseContract.PoolDetails._ID
         + ") REFERENCES " + DatabaseContract.Peserta.TABLE_NAME
         + "(" + DatabaseContract.Peserta._ID + ")"
         + ");");
@@ -135,6 +139,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         for(HashMap<String, String> row : data.getData()){
             ContentValues content = new ContentValues();
             for(String key : row.keySet()){
+                Log.d("DatabaseHelper", "Put "+key+" = "+row.get(key));
                 content.put(key, row.get(key));
             }
             getWritableDatabase().insertWithOnConflict(data.getTableName(),
@@ -189,6 +194,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
                     result.getColumnIndex(DatabaseContract.Bidang.COLUMN_NAMA)
             ));
         }
+        result.close();
         return list.toArray(new String[0]);
     }
 
@@ -239,10 +245,89 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         for(int i = 0; i < hasilAkhir.length; i++){
             hasilAkhir[i] = hasil.valueAt(i);
         }
+
+        result.close();
+
         return hasilAkhir;
     }
 
     private String leftJoin(String left, String right, String condition){
         return "("+left+") LEFT JOIN ("+right+") ON ("+condition+")";
+    }
+
+    /**
+     * Memberikan data peserta dengan ID yang diinginkan
+     * @param pesertaID ID dari peserta yang dicari
+     * @return Data peserta dengan ID ygn diberikan
+     */
+    public DataPeserta getInfoPeserta(Integer pesertaID){
+        Cursor result = getReadableDatabase().rawQuery(
+                "SELECT * FROM "
+                + leftJoin(
+                        leftJoin(
+                                leftJoin(
+                                        leftJoin(
+                                                DatabaseContract.Peserta.TABLE_NAME,
+                                                DatabaseContract.Sekolah.TABLE_NAME,
+                                                DatabaseContract.Peserta.COLUMN_SEKOLAH_ID + "=" +
+                                                        DatabaseContract.Sekolah._ID),
+                                        DatabaseContract.PoolDetails.TABLE_NAME,
+                                        DatabaseContract.Peserta._ID + "=" +
+                                                DatabaseContract.PoolDetails._ID),
+                                DatabaseContract.PencaksilatDetails.TABLE_NAME,
+                                DatabaseContract.Peserta._ID + "=" +
+                                        DatabaseContract.PencaksilatDetails._ID),
+                        DatabaseContract.TaekwondoDetails.TABLE_NAME,
+                        DatabaseContract.Peserta._ID + "=" +
+                                DatabaseContract.TaekwondoDetails._ID) +
+                        " WHERE " + DatabaseContract.Peserta._ID + " = " + pesertaID,
+                new String[0]);
+        result.moveToNext();
+        DataPeserta returnResult = new DataPeserta(result);
+        result.close();
+        return returnResult;
+    }
+
+    /**
+     * Memberikan data umum dari lomba dengan ID yang ditentukan
+     * @param lombaID ID dari lomab yang diinginkan
+     * @return Data umum lomba yang diinginkan
+     */
+    public DataLomba getLomba(Integer lombaID){
+        String tLomba, tLombaDetails, tPeserta, tLokasi;
+        tLomba = DatabaseContract.Lomba.TABLE_NAME;
+        tLombaDetails = DatabaseContract.LombaDetails.TABLE_NAME;
+        tPeserta = DatabaseContract.Peserta.TABLE_NAME;
+        tLokasi = DatabaseContract.Lokasi.TABLE_NAME;
+        Cursor result = getReadableDatabase().rawQuery(
+                "SELECT * FROM " +
+                        leftJoin(
+                                leftJoin(
+                                        leftJoin(
+                                                tLombaDetails,
+                                                tLomba,
+                                                DatabaseContract.Lomba._ID + "=" +
+                                                        DatabaseContract.LombaDetails.COLUMN_LOMBA_ID),
+                                        tPeserta,
+                                        DatabaseContract.Peserta._ID + "=" +
+                                                DatabaseContract.LombaDetails.COLUMN_PESERTA_ID),
+                                tLokasi,
+                                DatabaseContract.Lokasi._ID + "=" +
+                                        DatabaseContract.Lomba.COLUMN_LOKASI_ID
+                        ) +
+                        " WHERE " + DatabaseContract.Lomba._ID + " = " + lombaID,
+                new String[0]
+        );
+        Log.d("DatabaseHelper", "Jumlah Peserta = " + result.getCount());
+        DataLomba hasil = null;
+        while(result.moveToNext()){
+            if(hasil == null){
+                hasil = new DataLomba(result);
+            }
+            DataLombaDetails peserta = new DataLombaDetails(result);
+            Log.d("DatabaseHelper", "Insert " + hasil.addPeserta(peserta).toString());
+        }
+        result.close();
+        return hasil;
     }
 }

@@ -55,12 +55,20 @@ public class DataLombaDetails {
     }
 
     /**
-     * Memberikan data peserta yang baru, semua data lain akan direset
+     * Mengubah data peserta, semua data lain akan direset
      * @param peserta Data peserta yang baru
      */
     public void setPeserta(DataPeserta peserta) {
         this.peserta = peserta;
         this.skorPeserta = -1;
+    }
+
+    /**
+     * Mengubah data peserta, data lain tetap ada
+     * @param peserta Data peserta yang baru
+     */
+    public void setPesertaRetainInfo(DataPeserta peserta){
+        this.peserta = peserta;
     }
 
     /**
@@ -75,5 +83,11 @@ public class DataLombaDetails {
         }else{
             return false;
         }
+    }
+
+    @Override
+    public String toString(){
+        return peserta.toString() + "\n" +
+                "Skor : "+getSkorPeserta();
     }
 }

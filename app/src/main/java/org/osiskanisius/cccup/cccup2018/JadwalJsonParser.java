@@ -51,12 +51,12 @@ public class JadwalJsonParser {
 
             JSONArray daftarPeserta = dataLomba.getJSONArray(DAFTAR_PESERTA);
             int jumlahPeserta = daftarPeserta.length();
-            for(int i = 0; i < jumlahPeserta; i++){
+            for(int i = 0; i < jumlahPeserta; i++){/*
                 JSONObject dataPeserta = daftarPeserta.getJSONObject(i);
                 DataLombaDetails res = new DataLombaDetails(dataPeserta.getString(NAMA_PESERTA),
                                                     dataPeserta.getString(NAMA_SEKOLAH),
                                                     dataPeserta.getInt(SKOR_PESERTA));
-                result.addPeserta(res);
+                result.addPeserta(res);*/
             }
             hasilAkhir[idx] = result;
             idx++;//Fuck you...
