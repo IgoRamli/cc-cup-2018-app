@@ -8,6 +8,7 @@ public class MainActivityPresenter implements MainActivityContract.Presenter{
     //State Constants
     public static final short HOME_STATE = 1;
     public static final short JADWAL_STATE = 2;
+    public static final short MAP_STATE = 3;
 
     //Bundle keys
     public static final String CURRENT_STATE_KEY = "currentState";

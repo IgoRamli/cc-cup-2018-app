@@ -69,6 +69,8 @@ public class MainActivity extends FragmentActivity implements MainActivityContra
                         .replace(R.id.main_fragment, jadwal)
                         .commit();
                 return true;
+            case MainActivityPresenter.MAP_STATE:
+                return true;
         }
         return false;
     }
@@ -79,6 +81,8 @@ public class MainActivity extends FragmentActivity implements MainActivityContra
                 return MainActivityPresenter.HOME_STATE;
             case R.id.navigation_jadwal:
                 return MainActivityPresenter.JADWAL_STATE;
+            case R.id.navigation_map:
+                return MainActivityPresenter.MAP_STATE;
             default:
                 return 0;
         }
