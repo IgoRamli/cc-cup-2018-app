@@ -1,5 +1,7 @@
 package org.osiskanisius.cccup.cccup2018.main;
 
+import android.Manifest;
+import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.FragmentActivity;
 import android.support.v4.app.FragmentManager;
 import android.os.Bundle;
@@ -19,6 +21,8 @@ public class MainActivity extends FragmentActivity implements MainActivityContra
 
     private MainActivityContract.Presenter mPresenter;
 
+    private static final Integer CODE_PERMISSIONS = 69;
+
     private BottomNavigationView.OnNavigationItemSelectedListener mOnNavigationItemSelectedListener
             = new BottomNavigationView.OnNavigationItemSelectedListener() {
         @Override
@@ -30,6 +34,7 @@ public class MainActivity extends FragmentActivity implements MainActivityContra
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        requestIndoorAtlasPermission();
         setContentView(R.layout.activity_main);
 
         initializeAll();
@@ -104,5 +109,21 @@ public class MainActivity extends FragmentActivity implements MainActivityContra
     private void loadMainFragment(){
         short currentState = mPresenter.getCurrentState();
         changeFragment(currentState);
+    }
+
+    private void requestIndoorAtlasPermission(){
+        String[] neededPermissions = {
+                Manifest.permission.CHANGE_WIFI_STATE,
+                Manifest.permission.ACCESS_WIFI_STATE,
+                Manifest.permission.ACCESS_COARSE_LOCATION
+        };
+        ActivityCompat.requestPermissions( this, neededPermissions, CODE_PERMISSIONS);
+    }
+
+    @Override
+    public void onRequestPermissionsResult(int requestCode, String[] permissions, int[] grantResults) {
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults);
+
+        //Handle if any of the permissions are denied, in grantResults
     }
 }
