@@ -23,6 +23,7 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -55,7 +56,7 @@ public class MapFragment extends Fragment {
     private static final int REQUEST_CODE_WRITE_EXTERNAL_STORAGE = 1;
 
     //IndoorAtlas
-    private static final float dotRadius = 1.0f;
+    private static final float dotRadius = 0.25f;
     private IALocationManager mLocationManager;
     private IAResourceManager mResourceManager;
     private DownloadManager mDownloadManager;
@@ -99,6 +100,7 @@ public class MapFragment extends Fragment {
     private long mDownloadId;
 
     private BlueDotView mImageView;
+    private ProgressBar mProgressBar;
 
     public MapFragment() {
         // Required empty public constructor
@@ -133,6 +135,7 @@ public class MapFragment extends Fragment {
         // Inflate the layout for this fragment
         View view =  inflater.inflate(R.layout.fragment_map, container, false);
         mImageView = view.findViewById(R.id.map_view);
+        mProgressBar = view.findViewById(R.id.loading_pb);
         return view;
     }
 
@@ -188,6 +191,9 @@ public class MapFragment extends Fragment {
 
     private void fetchFloorPlan(String id) {
         cancelPendingNetworkCalls();
+        if(mImageView.getVisibility() == BlueDotView.INVISIBLE){
+            showLoadingState();
+        }
         final IATask<IAFloorPlan> asyncResult = mResourceManager.fetchFloorPlanWithId(id);
         mPendingAsyncResult = asyncResult;
         if (mPendingAsyncResult != null) {
@@ -244,6 +250,7 @@ public class MapFragment extends Fragment {
         Log.w(TAG, "showFloorPlanImage: " + filePath);
         mImageView.setRadius(mFloorPlan.getMetersToPixels() * dotRadius);
         mImageView.setImage(ImageSource.uri(filePath));
+        showMapState();
     }
 
 
@@ -272,4 +279,14 @@ public class MapFragment extends Fragment {
 
     }
 
+
+    public void showLoadingState(){
+        mProgressBar.setVisibility(ProgressBar.VISIBLE);
+        mImageView.setVisibility(BlueDotView.INVISIBLE);
+    }
+
+    public void showMapState(){
+        mProgressBar.setVisibility(ProgressBar.INVISIBLE);
+        mImageView.setVisibility(BlueDotView.VISIBLE);
+    }
 }

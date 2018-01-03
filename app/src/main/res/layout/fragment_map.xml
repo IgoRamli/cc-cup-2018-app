@@ -7,6 +7,13 @@
     <org.osiskanisius.cccup.cccup2018.map.BlueDotView
         android:id="@+id/map_view"
         android:layout_width="match_parent"
-        android:layout_height="match_parent" />
+        android:layout_height="match_parent"
+        android:visibility="invisible"/>
+
+    <ProgressBar
+        android:id="@+id/loading_pb"
+        android:layout_width="42dp"
+        android:layout_height="42dp"
+        android:layout_gravity="center" />
 
 </FrameLayout>
