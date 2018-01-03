@@ -9,4 +9,7 @@
     <string name="error_msg">Ups! Terjadi kesalahan! Coba lagi</string>
     <string name="empty_msg">Tidak ada lomba yang dijadwalkan untuk saat ini</string>
     <string name="loading_msg">Fetching Data</string>
+
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
 </resources>

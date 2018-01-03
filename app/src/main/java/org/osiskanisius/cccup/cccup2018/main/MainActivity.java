@@ -12,10 +12,12 @@ import android.view.MenuItem;
 import org.osiskanisius.cccup.cccup2018.R;
 import org.osiskanisius.cccup.cccup2018.home.HomeFragment;
 import org.osiskanisius.cccup.cccup2018.jadwal.JadwalFragment;
+import org.osiskanisius.cccup.cccup2018.map.MapFragment;
 
 public class MainActivity extends FragmentActivity implements MainActivityContract.View {
     private HomeFragment home;
     private JadwalFragment jadwal;
+    private MapFragment map;
 
     private BottomNavigationView navigation;
 
@@ -70,6 +72,9 @@ public class MainActivity extends FragmentActivity implements MainActivityContra
                         .commit();
                 return true;
             case MainActivityPresenter.MAP_STATE:
+                getSupportFragmentManager().beginTransaction()
+                        .replace(R.id.main_fragment, map)
+                        .commit();
                 return true;
         }
         return false;
@@ -96,6 +101,7 @@ public class MainActivity extends FragmentActivity implements MainActivityContra
         mPresenter = new MainActivityPresenter(this);
         home = HomeFragment.newInstance();
         jadwal = JadwalFragment.newInstance();
+        map = MapFragment.newInstance();
         navigation = (BottomNavigationView) findViewById(R.id.navigation);
     }
 
