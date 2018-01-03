@@ -4,14 +4,9 @@
     android:layout_height="match_parent"
     tools:context="org.osiskanisius.cccup.cccup2018.map.MapFragment">
 
-    <ScrollView
+    <org.osiskanisius.cccup.cccup2018.map.BlueDotView
+        android:id="@+id/map_view"
         android:layout_width="match_parent"
-        android:layout_height="match_parent">
-        <TextView
-            android:id="@+id/log_tv"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content" />
-
-    </ScrollView>
+        android:layout_height="match_parent" />
 
 </FrameLayout>
