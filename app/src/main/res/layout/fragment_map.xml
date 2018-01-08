@@ -2,12 +2,14 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     tools:context="org.osiskanisius.cccup.cccup2018.map.MapFragment">
 
     <org.osiskanisius.cccup.cccup2018.map.BlueDotView
         android:id="@+id/map_view"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
+        android:layout_marginTop="?actionBarSize"
         android:visibility="invisible"/>
 
     <ProgressBar
@@ -15,5 +17,13 @@
         android:layout_width="42dp"
         android:layout_height="42dp"
         android:layout_gravity="center" />
+
+    <android.support.v7.widget.Toolbar
+        android:layout_width="match_parent"
+        android:layout_height="?actionBarSize"
+        android:background="@color/colorPrimary"
+        app:title="@string/title_map">
+
+    </android.support.v7.widget.Toolbar>
 
 </FrameLayout>
