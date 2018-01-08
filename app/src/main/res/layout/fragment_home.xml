@@ -1,21 +1,47 @@
-<android.support.design.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="?android:attr/windowBackground"
+    android:orientation="vertical"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     tools:context="org.osiskanisius.cccup.cccup2018.home.HomeFragment">
-        <android.support.v7.widget.Toolbar
-            android:layout_width="match_parent"
-            android:layout_height="?actionBarSize"
-            android:background="?attr/colorPrimary"
-            app:title="@string/title_home">
-        </android.support.v7.widget.Toolbar>
-    <TextView
-        android:id="@+id/tv_jadwal"
+    <android.support.v7.widget.Toolbar
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:layout_marginTop="?actionBarSize"
-        android:text="@string/hello_home_fragment" />
+        android:layout_height="?actionBarSize"
+        android:background="?attr/colorPrimary"
+        app:title="@string/title_home">
+    </android.support.v7.widget.Toolbar>
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:orientation="vertical"
+        android:layout_weight="1">
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/section_upcoming"
+            android:textAppearance="@style/TextAppearance.AppCompat.Title"/>
 
-</android.support.design.widget.CoordinatorLayout>
+        <ListView
+            android:id="@+id/upcoming_lv"
+            android:layout_width="match_parent"
+            android:layout_height="250dp" />
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:background="#dadada"
+            android:layout_marginLeft="8dp"
+            android:layout_marginRight="8dp" />
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/section_recent"
+            android:textAppearance="@style/TextAppearance.AppCompat.Title"/>
+        <ListView
+            android:id="@+id/recent_lv"
+            android:layout_width="match_parent"
+            android:layout_height="250dp"
+            android:maxHeight="100dp"/>
+    </LinearLayout>
+</LinearLayout>
