@@ -69,6 +69,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         + DatabaseContract.Lomba.COLUMN_NAMA + " TEXT NOT NULL, "
         + DatabaseContract.Lomba.COLUMN_DATE + " DATE, "
         + DatabaseContract.Lomba.COLUMN_WAKTU + " TIME, "
+        + DatabaseContract.Lomba.COLUMN_KETERANGAN + " TEXT, "
         + "FOREIGN KEY (" + DatabaseContract.Lomba.COLUMN_BIDANG_ID
         + ") REFERENCES " + DatabaseContract.Bidang.TABLE_NAME
         + "(" + DatabaseContract.Bidang._ID + "), "

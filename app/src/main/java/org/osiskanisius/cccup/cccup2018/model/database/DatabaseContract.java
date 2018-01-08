@@ -57,6 +57,7 @@ public final class DatabaseContract {
         public static final String COLUMN_NAMA = "nama"+"_"+TABLE_NAME;
         public static final String COLUMN_DATE = "date"+"_"+TABLE_NAME;
         public static final String COLUMN_WAKTU = "waktuMulai"+"_"+TABLE_NAME;
+        public static final String COLUMN_KETERANGAN = "keterangan"+"_"+TABLE_NAME;
     }
 
     public static class LombaDetails implements BaseColumns{

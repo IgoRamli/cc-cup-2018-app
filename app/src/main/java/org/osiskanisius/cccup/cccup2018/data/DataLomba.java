@@ -26,6 +26,7 @@ public class DataLomba {
     private String namaLomba = null;
     private Date waktuMulai = null;
     private String lokasi = null;
+    private String keterangan = null;
     private ArrayList<DataLombaDetails> peserta = new ArrayList<>();
     private static final SimpleDateFormat tableFormat =
             new SimpleDateFormat("yyyy-MM-dd HH:mm:ss", Locale.US);
@@ -68,12 +69,16 @@ public class DataLomba {
             } catch (ParseException e) {
                 Log.w("DataLomba", "Tanggal/waktu mulai lomba di Cursor tidak valid!");
             }
+
+            if(cursor.getColumnIndex(DatabaseContract.Lomba.COLUMN_KETERANGAN) != -1){
+                keterangan = cursor.getString(cursor.getColumnIndex(DatabaseContract.Lomba.COLUMN_KETERANGAN));
+            }
         }
     }
 
     /**
      * Memberikan ID lomba
-     * @return
+     * @return Integer yang berisi data lomba
      */
     public Integer getLombaID(){
         return this.lombaID;
@@ -218,6 +223,14 @@ public class DataLomba {
         this.lokasi = lokasi;
     }
 
+    public String getKeterangan(){
+        if(keterangan == null || keterangan.equals("")){
+            return "n/a";
+        }else{
+            return keterangan;
+        }
+    }
+
     @Override
     public String toString(){
         String string = "";
@@ -226,7 +239,8 @@ public class DataLomba {
         for(int i = 0; i < peserta.length; i++){
             string += "-> " + peserta[i].toString() + "\n";
         }
-        string += getLokasi();
+        string += getLokasi() + "\n";
+        string += getKeterangan();
         return string;
     }
 }
