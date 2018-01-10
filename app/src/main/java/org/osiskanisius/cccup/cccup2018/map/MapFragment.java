@@ -56,7 +56,7 @@ public class MapFragment extends Fragment {
     private static final int REQUEST_CODE_WRITE_EXTERNAL_STORAGE = 1;
 
     //IndoorAtlas
-    private static final float dotRadius = 0.25f;
+    private static final float dotRadius = 1.00f;
     private IALocationManager mLocationManager;
     private IAResourceManager mResourceManager;
     private DownloadManager mDownloadManager;
