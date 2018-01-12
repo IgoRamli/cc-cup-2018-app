@@ -40,12 +40,29 @@
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value=".main.MainActivity" />
         </activity>
+        <service
+            android:name=".service.BackgroundNotificationService">
+            <intent-filter>
+                <action android:name="com.google.firebase.MESSAGING_EVENT"/>
+            </intent-filter>
+        </service>
+
         <meta-data
             android:name="com.indooratlas.android.sdk.API_KEY"
             android:value="9dde258d-d220-440d-98ac-30cdc52daf00"/>
         <meta-data
             android:name="com.indooratlas.android.sdk.API_SECRET"
             android:value="gkn0aqZtdFRzqZQH7KiTjLIx+S4tdE0oXzC/8Y2X2SdF8Mj7wEVIfIdPISyg+jmbZ1EJxJSJzw836/wNiTebTCttbe6vIIcW1FTjesjEE0vy1DCqNpwjIfYqJimkPw=="/>
+        <!-- Set custom default icon. This is used when no icon is set for incoming notification messages.
+         See README(https://goo.gl/l4GJaQ) for more.
+        <meta-data
+            android:name="com.google.firebase.messaging.default_notification_icon"
+            android:resource="@drawable/ic_stat_ic_notification" /> -->
+        <!-- Set color used with incoming notification messages. This is used when no color is set for the incoming
+             notification message. See README(https://goo.gl/6BKBk7) for more. -->
+        <meta-data
+            android:name="com.google.firebase.messaging.default_notification_color"
+            android:resource="@color/colorAccent" />
     </application>
 
 </manifest>
