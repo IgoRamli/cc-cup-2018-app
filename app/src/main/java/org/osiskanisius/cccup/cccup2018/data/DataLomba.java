@@ -10,6 +10,7 @@ import org.osiskanisius.cccup.cccup2018.model.database.DatabaseContract;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.Date;
 import java.util.Locale;
 
@@ -24,6 +25,7 @@ import java.util.Locale;
 public class DataLomba {
     private Integer lombaID;
     private String namaLomba = null;
+    private String namaBidang = "";
     private Date waktuMulai = null;
     private String lokasi = null;
     private String keterangan = null;
@@ -73,7 +75,16 @@ public class DataLomba {
             if(cursor.getColumnIndex(DatabaseContract.Lomba.COLUMN_KETERANGAN) != -1){
                 keterangan = cursor.getString(cursor.getColumnIndex(DatabaseContract.Lomba.COLUMN_KETERANGAN));
             }
+            if(cursor.getColumnIndex(DatabaseContract.Bidang.COLUMN_NAMA) != -1){
+                namaBidang = cursor.getString(cursor.getColumnIndex(DatabaseContract.Bidang.COLUMN_NAMA));
+            }
+        }else{
+            Log.i("DataLomba", "LombaID is null! Is this right?");
         }
+    }
+
+    public String getNamaBidang(){
+        return this.namaBidang;
     }
 
     /**
@@ -231,9 +242,30 @@ public class DataLomba {
         }
     }
 
+    public String getWaktuMulaiFromNow(){
+        long remainingTimeInSeconds =  waktuMulai.getTime() - Calendar.getInstance().getTime().getTime();
+        remainingTimeInSeconds /= 1000;
+        Log.d("DataLomba", getWaktuMulaiFull());
+        if(remainingTimeInSeconds < 60){
+            return "In less than a minute";
+        }else if(remainingTimeInSeconds < 120){
+            return "In a minute";
+        }else if(remainingTimeInSeconds < 3600){
+            return "In " + (remainingTimeInSeconds/60) + " minutes";
+        }else if(remainingTimeInSeconds < 7200){
+            return "In an hour";
+        }else if(remainingTimeInSeconds < 3600*24){
+            return "In " + (remainingTimeInSeconds/3600) + " hours";
+        }else if(remainingTimeInSeconds < 3600*24*2){
+            return "Tomorrow";
+        }else{
+            return "In " + (remainingTimeInSeconds/(3600*24)) + " days";
+        }
+    }
+
     @Override
     public String toString(){
-        String string = "";
+        String string = getNamaLomba() + "(" + getLombaID() + ")";
         string += getWaktuMulai() + "\n";
         DataLombaDetails[] peserta = getPeserta();
         for(int i = 0; i < peserta.length; i++){
@@ -242,5 +274,15 @@ public class DataLomba {
         string += getLokasi() + "\n";
         string += getKeterangan();
         return string;
+    }
+
+    public String getPesertaHeadline(){
+        if(peserta.size() == 0) return "TBA";
+        else if(peserta.size() == 1){
+            return peserta.get(0).getPeserta().getNamaPeserta();
+        }else{
+            return peserta.get(0).getPeserta().getNamaPeserta() + " vs "
+                    + peserta.get(1).getPeserta().getNamaPeserta();
+        }
     }
 }

@@ -199,37 +199,51 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         return list.toArray(new String[0]);
     }
 
+    private Cursor getListLomba(String condition, String order, int maxSize){
+        String tLomba, tLombaDetails, tPeserta, tLokasi, tBidang;
+        tLomba = DatabaseContract.Lomba.TABLE_NAME;
+        tLombaDetails = DatabaseContract.LombaDetails.TABLE_NAME;
+        tPeserta = DatabaseContract.Peserta.TABLE_NAME;
+        tLokasi = DatabaseContract.Lokasi.TABLE_NAME;
+        tBidang = DatabaseContract.Bidang.TABLE_NAME;
+        String query = "SELECT * FROM " +
+                leftJoin(
+                        leftJoin(
+                                leftJoin(
+                                        tLombaDetails,
+                                        leftJoin(
+                                                tLomba,
+                                                tBidang,
+                                                DatabaseContract.Lomba.COLUMN_BIDANG_ID + "=" +
+                                                        DatabaseContract.Bidang._ID),
+                                        DatabaseContract.Lomba._ID + "=" +
+                                                DatabaseContract.LombaDetails.COLUMN_LOMBA_ID),
+                                tPeserta,
+                                DatabaseContract.Peserta._ID + "=" +
+                                        DatabaseContract.LombaDetails.COLUMN_PESERTA_ID),
+                        tLokasi,
+                        DatabaseContract.Lokasi._ID + "=" +
+                                DatabaseContract.Lomba.COLUMN_LOKASI_ID
+                );
+        if(condition != null){
+            query += " WHERE " + condition;
+        }
+        if(order != null){
+            query += " ORDER BY " + order;
+        }
+        if(maxSize > 0){
+            query += " LIMIT " + maxSize;
+        }
+        return getReadableDatabase().rawQuery(query, new String[0]);
+    }
+
     /**
      * Memberikan data semua lomba pada bidang tertentu
      * @param bidangID ID dari bidang yang lombanya ingin dicari
      * @return Array yang berisi semua data lomba yang dicari
      */
     public DataLomba[] getListLomba(Integer bidangID){
-        String tLomba, tLombaDetails, tPeserta, tLokasi;
-        tLomba = DatabaseContract.Lomba.TABLE_NAME;
-        tLombaDetails = DatabaseContract.LombaDetails.TABLE_NAME;
-        tPeserta = DatabaseContract.Peserta.TABLE_NAME;
-        tLokasi = DatabaseContract.Lokasi.TABLE_NAME;
-        Cursor result = getReadableDatabase().rawQuery(
-                "SELECT * FROM " +
-                        leftJoin(
-                                leftJoin(
-                                        leftJoin(
-                                                tLombaDetails,
-                                                tLomba,
-                                                DatabaseContract.Lomba._ID + "=" +
-                                                        DatabaseContract.LombaDetails.COLUMN_LOMBA_ID),
-                                        tPeserta,
-                                        DatabaseContract.Peserta._ID + "=" +
-                                                DatabaseContract.LombaDetails.COLUMN_PESERTA_ID),
-                                tLokasi,
-                                DatabaseContract.Lokasi._ID + "=" +
-                                        DatabaseContract.Lomba.COLUMN_LOKASI_ID
-                        ) +
-                        " WHERE " + DatabaseContract.Lomba.COLUMN_BIDANG_ID + " = " +
-                        bidangID,
-                new String[0]
-        );
+        Cursor result = getListLomba(DatabaseContract.Bidang._ID + " = " + bidangID, null, -1);
 
         SparseArray<DataLomba> hasil = new SparseArray<>();
         while(result.moveToNext()){
@@ -291,7 +305,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
 
     /**
      * Memberikan data umum dari lomba dengan ID yang ditentukan
-     * @param lombaID ID dari lomab yang diinginkan
+     * @param lombaID ID dari lomba yang diinginkan
      * @return Data umum lomba yang diinginkan
      */
     public DataLomba getLomba(Integer lombaID){
@@ -330,5 +344,34 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         }
         result.close();
         return hasil;
+    }
+
+    public DataLomba[] getUpcomingLomba(int size){
+        String condition = "date('now') < " + DatabaseContract.Lomba.COLUMN_DATE
+                + " OR (date('now') = " + DatabaseContract.Lomba.COLUMN_DATE + " AND time('now') < "
+                + DatabaseContract.Lomba.COLUMN_WAKTU + ")";
+        String order = DatabaseContract.Lomba.COLUMN_DATE + " , "
+                + DatabaseContract.Lomba.COLUMN_WAKTU;
+        Cursor result = getListLomba(condition, order, size*2);//INGAT! Ada lomba yang jumlah pemainnya 2
+
+        SparseArray<DataLomba> hasil = new SparseArray<>();
+        while(result.moveToNext()){
+            DataLombaDetails row = new DataLombaDetails(result);
+            Integer id = result.getInt(result.getColumnIndex(DatabaseContract.Lomba._ID));
+            if(hasil.get(id) == null){
+                DataLomba rowLomba = new DataLomba(result);
+                hasil.append(id, rowLomba);
+            }
+            hasil.get(id).addPeserta(row);
+        }
+
+        DataLomba[] hasilAkhir = new DataLomba[hasil.size()];
+        for(int i = 0; i < hasilAkhir.length; i++){
+            hasilAkhir[i] = hasil.valueAt(i);
+        }
+
+        result.close();
+
+        return hasilAkhir;
     }
 }
