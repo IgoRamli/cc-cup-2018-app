@@ -1,6 +1,7 @@
 package org.osiskanisius.cccup.cccup2018.adapter;
 
 import android.content.Context;
+import android.content.Intent;
 import android.database.DataSetObserver;
 import android.support.annotation.NonNull;
 import android.support.v7.widget.CardView;
@@ -10,10 +11,12 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.ListAdapter;
+import android.widget.ListView;
 import android.widget.TextView;
 
 import org.osiskanisius.cccup.cccup2018.R;
 import org.osiskanisius.cccup.cccup2018.data.DataLomba;
+import org.osiskanisius.cccup.cccup2018.detail.DetailActivity;
 
 import java.util.List;
 
@@ -22,18 +25,37 @@ import java.util.List;
  */
 
 public class CardViewAdapter extends ArrayAdapter<DataLomba> {
+    private int size;
+    private ListView parent;
+    private final View.OnClickListener mOnClickListener = new View.OnClickListener() {
+        @Override
+        public void onClick(View view) {
+            Intent gotoDetail = new Intent(view.getContext(), DetailActivity.class);
+            int position = parent.getPositionForView(view);
+            gotoDetail.putExtra("lombaID", getItem(position).getLombaID());
+            view.getContext().startActivity(gotoDetail);
+            //Toast.makeText(view.getContext(), "Item selected", Toast.LENGTH_LONG).show();
+        }
+    };
+
     public CardViewAdapter(Context context, int textViewResourceId) {
         super(context, textViewResourceId);
     }
 
     public CardViewAdapter(Context context, int resource, DataLomba[] items) {
         super(context, resource, items);
+        size = items.length;
+    }
+
+    @Override
+    public int getCount(){
+        return size;
     }
 
     @NonNull
     @Override
     public View getView(int position, View convertView, ViewGroup parent){
-
+        this.parent = (ListView) parent;
         View v = convertView;
 
         if (v == null) {
@@ -59,6 +81,8 @@ public class CardViewAdapter extends ArrayAdapter<DataLomba> {
             mWaktuMulai.setText(data.getWaktuMulaiFromNow());
             mNamaPeserta.setText(data.getPesertaHeadline());
         }
+
+        v.setOnClickListener(mOnClickListener);
 
         return v;
     }

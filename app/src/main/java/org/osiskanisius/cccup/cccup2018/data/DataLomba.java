@@ -265,7 +265,7 @@ public class DataLomba {
 
     @Override
     public String toString(){
-        String string = getNamaLomba() + "(" + getLombaID() + ")";
+        String string = "";
         string += getWaktuMulai() + "\n";
         DataLombaDetails[] peserta = getPeserta();
         for(int i = 0; i < peserta.length; i++){

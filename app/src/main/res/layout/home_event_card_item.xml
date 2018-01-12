@@ -3,7 +3,8 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:padding="16dp">
+    android:background="@color/colorCardBackground"
+    android:padding="8dp">
 
     <TextView
         android:id="@+id/nama_bidang_tv"
@@ -11,7 +12,9 @@
         android:maxWidth="100dp"
         android:layout_height="wrap_content"
         android:gravity="center"
-        android:textAppearance="@style/TextAppearance.AppCompat.Title"
+        android:textAppearance="@style/TextAppearance.AppCompat.Body2"
+        android:textStyle="bold"
+        android:padding="8dp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
@@ -21,6 +24,7 @@
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:gravity="center"
+        android:padding="8dp"
         android:textAppearance="@style/TextAppearance.AppCompat.Body2"
         app:layout_constraintBottom_toTopOf="@id/nama_peserta_tv"
         app:layout_constraintEnd_toStartOf="@+id/waktu_mulai_tv"
@@ -32,6 +36,7 @@
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:gravity="center"
+        android:padding="8dp"
         android:textAppearance="@style/TextAppearance.AppCompat.Body1"
         app:layout_constraintStart_toEndOf="@id/nama_bidang_tv"
         app:layout_constraintEnd_toStartOf="@id/waktu_mulai_tv"
@@ -44,6 +49,7 @@
         android:maxWidth="100dp"
         android:layout_height="0dp"
         android:gravity="center"
+        android:padding="8dp"
         android:textAppearance="@style/TextAppearance.AppCompat.Body1"
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintBottom_toBottomOf="parent"
